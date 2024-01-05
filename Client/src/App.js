@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { AdminLayout, CreateProduct, DashBoard, ManageOrder, ManageProduct, ManageUser } from "./pages/admin";
-import { MemberLayout, Personal } from "./pages/member";
+import { MemberLayout, Personal, Checkout } from "./pages/member";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,7 +36,8 @@ function App() {
             <Route path={Path.CART} element={<Cart />} />
           </Route>
           <Route path={Path.CONFIRM} element={<Confirm />} />
-
+          
+          <Route path={Path.CHECKOUT} element={<Checkout />} />
 
           {/* admin */}
           <Route path={Path.ADMIN} element={<AdminLayout />} >
@@ -50,6 +51,7 @@ function App() {
           {/* member */}
           <Route path={Path.MEMBER} element={<MemberLayout />} >
             <Route path={Path.PERSONAL} element={<Personal />} />
+            
           </Route>
 
         </Routes>

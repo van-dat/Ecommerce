@@ -14,7 +14,7 @@ const Search = ({ data }) => {
 
 
   const handleSearch = () => {
-    const results = data.filter(item =>
+    const results = data?.filter(item =>
       item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     console.log(results)

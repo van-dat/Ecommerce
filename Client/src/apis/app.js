@@ -52,12 +52,11 @@ export const apiGetMaterial = () => axios({
     method : 'get',
 })
 
-
-// export const apiGetsProduct = (params) => axios({
-//     url : `/product/${params}`,
-//     method : 'get'
-   
-// })
+export const apiCreateOrder = (data) => axios({
+    url : '/order/',
+    method : 'post',
+    data
+})
 
 
 

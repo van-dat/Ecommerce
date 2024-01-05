@@ -25,7 +25,9 @@ const Path = {
     MANAGE_USER:'manage-user',
     MEMBER:'member',
     PERSONAL:'personal',
-    CREATE_PRODUCT:'create-product'
+    CREATE_PRODUCT:'create-product',
+    CHECKOUT:'checkout'
+
 
 
 

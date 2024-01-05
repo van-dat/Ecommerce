@@ -62,6 +62,15 @@ export const valueStatus = [{
   code: false
 }] 
 
+export const optionsPayment = [{
+  title: 'Thanh toán khi nhận hàng',
+  value: 'Thanh toán khi nhận hàng'
+},
+{
+  title: 'Thanh toán bằng Paypal',
+  value: 'Thanh toán bằng Paypal'
+}] 
+
 
 
  export const getMaterial = createAsyncThunk("/material", async (data, rejectWithValue) => {

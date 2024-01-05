@@ -59,6 +59,8 @@ const CreateProduct = () => {
                     formData.append('image', image);
                 }
             }
+
+
             if (valueOption.length > 0) {
                 for (const material of valueOption) {
                     formData.append('material', material)

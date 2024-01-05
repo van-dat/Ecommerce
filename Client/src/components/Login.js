@@ -30,7 +30,10 @@ const Login = () => {
   const [showUser, setShowUser] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
 
+
+
   const { user } = useSelector(state => state.auth)
+  console.log(user)
   const handleLogout = async () => {
     const response = await apis.apiLogOut();
     if (response.success) {

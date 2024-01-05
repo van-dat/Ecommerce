@@ -7,26 +7,25 @@ const asyncHandler = require("express-async-handler");
 
 const createOrder = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { coupon } = req.body;
-  const userCart = await User.findById(_id).select("cart").populate("cart.product", "title price");
-  // tao dữ liệu cho order
-  const products = userCart?.cart?.map((i) => ({
-    product: i.product._id,
-    price: i.product.price,
-    quantity: i.quantity,
-  }));
-  let total = userCart.cart.reduce((sum, e) => e.product.price * e.quantity + sum, 0);
-  const createData = {products, total, orderBy: _id}
-  if (coupon) {
-    const selectedCoupon = await Coupon.findById(coupon).select('discount')
-    total = Math.round((total * (1 - +selectedCoupon.discount / 100)) / 1000) * 1000 || total;
-    createData.total = total
-  }
-  const rs = await Order.create(createData);
+  const { products, total, paymentIntent, address, note } = req.body;
+
+  const rs = await Order.create({ products, total, paymentIntent, address, orderBy: _id, note });
+
+  const idCart = products.map(item => item._id)
+
+
+  const user = await User.findByIdAndUpdate(_id, { $pull: { cart: { _id :{ $in: idCart } }} }, { new: true })
+  console.log(user?.cart)
+
+  console.log(products)
   return res.status(200).json({
     status: rs ? true : false,
     rs: rs ? rs : "can not create Order",
+    user
   });
+
+
+
 });
 // getOne Order
 const getOrder = asyncHandler(async (req, res) => {

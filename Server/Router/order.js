@@ -11,5 +11,4 @@ router.get('/:oid',[verifyAccessToken],Controller.getOrder)
 
 
 
-
 module.exports = router

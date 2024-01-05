@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import { BreadCrumb, Product } from '../../components'
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { totalPrice } from '../../ultils/_helper'
 import { fnPrice } from '../../ultils/fn'
 import icons from '../../ultils/icon'
 import { getCurrentUser } from '../../store/action'
-
 import * as apis from '../../apis'
-
+import Path from '../../ultils/path'
+import { cartCurrent, getMethodPayment } from '../../store/Slice/cartSlice'
+import { toast } from 'react-toastify'
+import Select from 'react-dropdown-select';
+import { optionsPayment } from '../../store/action'
 
 const { HiMiniPlus, HiMinus, MdOutlineDelete, PiShoppingCartThin } = icons
 
@@ -18,13 +22,19 @@ const { HiMiniPlus, HiMinus, MdOutlineDelete, PiShoppingCartThin } = icons
 const Cart = () => {
 
 
+
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const { user } = useSelector(state => state.auth)
     const { reviewProduct } = useSelector(state => state.product)
     const [selectedValues, setSelectedValues] = useState([]);
     const [note, setNote] = useState('');
-    const [coupon, setCoupon] = useState('');
+    const [paymentIntent, setPaymentIntent] = useState([]);
     const [review, setReview] = useState([]);
+
+
+    const [listProductPayment, setListProductPayment] = useState([]);
+
 
     const fetchData = async (pid) => {
         const response = await apis.apiOneProduct(pid);
@@ -46,17 +56,17 @@ const Cart = () => {
 
 
 
-    const handleChangeSize = (e, value) => {
+    const handleChangeProduct = (e, value, product) => {
         const isChecked = e.target.checked;
         if (isChecked) {
             setSelectedValues([...selectedValues, value]);
+            setListProductPayment([...listProductPayment, product])
+
         } else {
             setSelectedValues(selectedValues.filter((val) => val !== value));
+            setListProductPayment(listProductPayment.filter((val) => val !== product));
         }
     }
-
-
-
 
     const handleReduce = async (e) => {
         const response = await apis.apiUpdateQuantity({ id: e, action: 0 })
@@ -75,6 +85,11 @@ const Cart = () => {
         }
     }
 
+    const onChangepaymentIntent = (data) => {
+        setPaymentIntent(data)
+    }
+
+
 
     const handleRemove = async (e) => {
         const response = await apis.apiRemoveItemCart({ id: e })
@@ -83,29 +98,46 @@ const Cart = () => {
 
         }
     }
+    // payment
+    const handlePayment = () => {
+        const data = []
+        if (listProductPayment?.length < 1) {
+            return toast.warning('Vui lòng chọn sản phẩm để thanh toán ')
+        }
+        if (paymentIntent?.length < 1) {
+            return toast.warning('Vui lòng chọn phương thức thanh toán ')
+        }
+        dispatch(cartCurrent(listProductPayment))
+        navigate(`/${Path.CHECKOUT}`)
+         data.push({method: paymentIntent[0].title,note:note })
+        dispatch(getMethodPayment(data))
 
 
+
+        setPaymentIntent([])
+    }
 
     console.log(reviewProduct)
+
     return (
         <div className='mt-[165px] md:container md:mx-auto '>
             <BreadCrumb />
             <div className="flex pb-4">
                 <div className="flex flex-8 flex-col gap-4 pr-2  ">
-                    <div className='bg-white flex flex-col p-4 w-full gap-2 max-h-[400px]'>
+                    <div className='bg-white flex flex-col p-4 w-full gap-2 max-h-[450px]'>
                         <h5 className='capitalize text-xl font-semibold'>
                             Giỏ hàng :
                         </h5>
                         {user?.cart?.length < 1 &&
-                            <div className="flex items-center justify-center flex-col border-b mt-3 pb-4 text-main">
+                            <div className="flex items-center max-h-[450px] justify-center h-[450px] flex-col border-b mt-3 pb-4 text-main">
                                 <PiShoppingCartThin size={60} />
                                 <span >Hiện chưa có sản phẩm</span>
                             </div>
                         }
-                        <div className='w-full flex flex-col'>
+                        <div className='w-full flex flex-col max-h-[400px] overflow-y-auto'>
                             {user?.cart?.map((i, index) => (
                                 <div key={index} className="  w-full flex items-center border-t py-2 gap-2  group">
-                                    <input onChange={(e) => handleChangeSize(e, i._id)}
+                                    <input onChange={(e) => handleChangeProduct(e, i._id, i)}
                                         type="checkbox"
                                         value={i._id}
                                         id={i.size}
@@ -155,14 +187,14 @@ const Cart = () => {
 
 
                 </div>
-                <div className="flex flex-2 pl-2 max-h-[400px] ">
+                <div className="flex flex-2 pl-2 max-h-[450px] ">
                     <div className='bg-white flex-col p-4 w-full'>
                         <h5 className='capitalize text-lg font-semibold border-b pb-3'>
                             thông tin đơn hàng
                         </h5>
                         <div className="flex justify-between items-center py-3 border-b">
                             <h5 className="capitalize font-semibold ">Tổng tiền:</h5>
-                            <span className="text-red-600 font-semibold ">{fnPrice(totalPrice(user, selectedValues))}₫</span>
+                            <span className="text-red-600 font-semibold ">{fnPrice(totalPrice(user, selectedValues))||'0'}₫</span>
                         </div>
                         <div className="flex py-3 flex-col gap-3">
                             <h5 className=" font-semibold ">Ghi chú đơn hàng</h5>
@@ -175,16 +207,16 @@ const Cart = () => {
                             />
                         </div>
                         <div className="flex py-3 flex-col gap-3">
-                            <input
-                                onChange={(e) => { setCoupon(e.target.value) }}
-                                value={coupon}
-                                type="text"
-                                placeholder='Nhập mã khuyến mãi (nếu có)'
-                                className=" uppercase text-xs font-semibold focus:outline-none block w-full rounded-md border py-1.5 px-3 text-gray-900 "
-
+                            <label className='font-semibold' htmlFor="Material">Phương thức thanh toán:</label>
+                            <Select
+                                values={paymentIntent}
+                                options={optionsPayment}
+                                onChange={(values) => onChangepaymentIntent(values)}
+                                labelField="title" valueField="title"
+                                placeholder='Vui lòng chọn Phương thức thanh toán'
                             />
                         </div>
-                        <div className="uppercase cursor-pointer rounded-sm  text-md font-semibold px-4 py-2 flex flex-1 justify-center hover:bg-hover  bg-[#a00000] text-white ">
+                        <div onClick={() => handlePayment()} className="uppercase cursor-pointer rounded-sm  text-md font-semibold px-4 py-2 flex flex-1 justify-center hover:bg-hover  bg-[#a00000] text-white ">
                             Thanh toán ngay
                         </div>
                     </div>
@@ -199,6 +231,7 @@ const Cart = () => {
                 </div>
                 <Product css
                     data={review}
+                  
                 />
             </div>
 

@@ -190,3 +190,21 @@ div .css-wmy1p7-ReactDropdownSelect {
   color: #444;
   height: 40px;
 }
+
+
+
+#addressComponent {
+  margin: 20px;
+}
+
+.shopee-address-selector label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.shopee-address-selector select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}

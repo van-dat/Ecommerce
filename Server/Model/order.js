@@ -6,26 +6,27 @@ const orderSchema = new mongoose.Schema({
     {
       product: {
         type: mongoose.Types.ObjectId,
-        ref : 'Product'
+        ref: 'Product'
       },
-      count : Number,
-      color : String,
-      price : Number
+      quantity: Number,
+      size: Array,
     }
   ],
   status: {
     type: String,
     default: 'processing',
-    enum : ['canceled', 'processing', 'success']
+    enum: ['canceled', 'processing', 'success']
   },
-  total : Number,
-  paymentIntent: {
-  },
+  address: String,
+  total: Number,
+  paymentIntent: String
+  ,
+  note:String,
   orderBy: {
     type: mongoose.Types.ObjectId,
-   ref : 'User',
+    ref: 'User',
   },
-},{timestamps: true});
+}, { timestamps: true });
 
 //Export the model
 module.exports = mongoose.model("Order", orderSchema);

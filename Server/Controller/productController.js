@@ -1,5 +1,6 @@
 
 const { ObjectId } = require('mongoose').Types;
+const product = require('../Model/product');
 const Product = require("../Model/product");
 const asyncHandler = require("express-async-handler");
 
@@ -22,7 +23,7 @@ const createProduct = asyncHandler(async (req, res) => {
 // getOneProduct
 const getProduct = asyncHandler(async (req, res) => {
   const { pid } = req.params;
-  const product = await Product.findById(pid).populate({path:'category', populate:{path:'branch',model:'Brand'}}).populate("size", "size").populate("material");
+  const product = await Product.findById(pid).populate({ path: 'category', populate: { path: 'branch', model: 'Brand' } }).populate("size", "size").populate("material");
   return res.status(200).json({
     success: product ? true : false,
     product: product ? product : [],
@@ -40,8 +41,8 @@ const getProducts = asyncHandler(async (req, res) => {
   const formateQueries = JSON.parse(queryString);
   //   filtering
   if (queryObj.title) formateQueries.title = { $regex: queryObj.title, $options: "i" };
-  let queryCommand = Product.find(formateQueries).populate({path:'category', populate:{path:'branch',model:'Brand'}});
-  
+  let queryCommand = Product.find(formateQueries).populate({ path: 'category', populate: { path: 'branch', model: 'Brand' } });
+
   //sorting
   // abc, gdf => abc gdf
   if (req.query.sort) {
@@ -100,9 +101,11 @@ const rating = asyncHandler(async (req, res) => {
   }
 
   // totalRating
-  const countRating = ratingProduct.rating.length;
-  const sumStar = ratingProduct.rating.reduce((sum, i) => sum + +i.star, 0);
+  const countRating = ratingProduct?.rating.length;
+  const sumStar = ratingProduct?.rating.reduce((sum, i) => sum + +i.star, 0);
   ratingProduct.totalRating = Math.round((sumStar * 10) / countRating) / 10;
+
+  console.log(Math.round((sumStar * 10) / countRating) / 10)
   // console.log(Math.round((sumStar * 10) / countRating) / 10);
   await ratingProduct.save();
   return res.status(200).json({
@@ -121,7 +124,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   if (file?.image) {
     req.body.image = file.image.map((item) => item.path);
   }
-  
+
   const updateProduct = await Product.findByIdAndUpdate(pid, req.body, { new: true });
 
   return res.status(200).json({
@@ -176,6 +179,34 @@ const uploadThumbnailProduct = asyncHandler(async (req, res) => {
     rs: response ? response : "cannot update image product",
   });
 });
+
+
+
+
+const checkRate = asyncHandler(async (req, res) => {
+
+  const { _id } = req.user
+  const { pid } = req.body
+
+  const response = await Product.find()
+
+  const userRate = response.rating?.map(item => item.posterBy == _id)
+
+
+  if (userRate && userRate?.length > 0) {
+    return res.json({
+      userId: _id
+    })
+  } else {
+    return res.json({
+      productId: pid
+    })
+  }
+
+})
+
+
+
 module.exports = {
   createProduct,
   getProduct,
@@ -185,5 +216,6 @@ module.exports = {
   rating,
   uploadImageProduct,
   uploadThumbnailProduct,
-  addSize
+  addSize,
+  checkRate
 };
