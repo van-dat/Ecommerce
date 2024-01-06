@@ -26,7 +26,7 @@ export const fncut = (text) => {
   return text.split('-')[1]
 };
 export const fnPercent = (number) => {
-  return Math.round(number / 10000000 * 100)
+  return Math.round(number / 10000000 * 100) ||0
 };
 export const fnCheckMail = (email) => {
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

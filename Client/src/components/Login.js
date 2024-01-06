@@ -134,7 +134,7 @@ const Login = () => {
 
       {user?.role == 'user' &&
         <div className="  px-3  text-white group select-none">
-          <span className="cursor-pointer" onClick={() => { navigate(Path.CART) }}>
+          <span className="cursor-pointer " onClick={() => { navigate(Path.CART) }}>
             <TiShoppingCart color="white" size={28} />
           </span>
 
@@ -219,8 +219,8 @@ const Login = () => {
 
       {
         user?.role == 'admin' &&
-        <div onClick={() => { navigate(Path.ADMIN) }} className="  px-3 flex items-center justify-center gap-2 text-white group select-none">
-          <span className="cursor-pointer" >
+        <div onClick={() => { navigate(Path.ADMIN) }} className="cursor-pointer  px-3 flex items-center justify-center gap-2 text-white group select-none">
+          <span className="" >
             <RiAdminLine color="white" size={23} />
           </span>
           <h6 className="m-0">Profile</h6>

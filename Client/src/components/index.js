@@ -15,6 +15,10 @@ export {default as BreadCrumb } from "./BreadCrumb";
 export {default as SelectDetail } from "./SelectDetail";
 export {default as Pagination } from "./Pagination";
 export {default as AddressSelector } from "./Address";
+export {default as Rating } from "./Rating";
+export {default as RateBar } from "./RateBar";
+
+
 
 
 

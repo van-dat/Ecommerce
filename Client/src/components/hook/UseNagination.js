@@ -7,7 +7,7 @@ import icons from '../../ultils/icon'
 const { BsThreeDots } = icons
 const UseNagination = (totalProductCount, currentPage, siblingCount = 1) => {
     const paginationArray = useMemo(() => {
-        const pageSize = process.env.REACT_APP_LIMIT || 10
+        const pageSize = process.env.REACT_APP_LIMIT || 20
         const paginationCount = Math.ceil(totalProductCount / pageSize)
         const totalPaginationItem = siblingCount + 5
 

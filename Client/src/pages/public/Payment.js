@@ -35,7 +35,7 @@ const ButtonWrapper = ({ showSpinner, currency, amount, payload , reduxDispatch}
         console.log('object')
         const response = await apis.apiCreateOrder(payload)
         reduxDispatch(getCurrentUser())
-        Swal.fire({text:'Thanh toán thành công', icon:'success'}).then(()=> navigate(`/${Path.CART}`))
+        Swal.fire({text:'Thanh toán thành công', icon:'Success'}).then(()=> navigate(`/${Path.CART}`))
     }
 
 
@@ -76,9 +76,10 @@ export default function Payment({ amount, payload }) {
 
     return (
         <div style={{ maxWidth: "750px", minHeight: "80px" }}>
-            <PayPalScriptProvider options={{ clientId: "test", components: "buttons", currency: "USD" }}>
+            <PayPalScriptProvider options={{ clientId: "AayRMX1TYKRJGX9uCH7goYVsN4ADfsA3wGSYnF4w4rXC-PWcI3cxUsidZmO2SjFZgL2O460mpwY4E_di",  components: "buttons", currency: "USD", disableFunding: 'card' }}>
                 <ButtonWrapper reduxDispatch= {dispatch} payload={payload} currency={'USD'} amount={amount} showSpinner={false} />
             </PayPalScriptProvider>
         </div>
+        
     );
 }

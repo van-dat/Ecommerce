@@ -2,7 +2,9 @@
 const { ObjectId } = require('mongoose').Types;
 const product = require('../Model/product');
 const Product = require("../Model/product");
+const axios = require('axios');
 const asyncHandler = require("express-async-handler");
+
 
 const createProduct = asyncHandler(async (req, res) => {
 
@@ -99,18 +101,18 @@ const rating = asyncHandler(async (req, res) => {
       { new: true }
     );
   }
-
-  // totalRating
-  const countRating = ratingProduct?.rating.length;
-  const sumStar = ratingProduct?.rating.reduce((sum, i) => sum + +i.star, 0);
-  ratingProduct.totalRating = Math.round((sumStar * 10) / countRating) / 10;
+  const data = await Product.findById(pid);
+ 
+  const countRating = data?.rating.length;
+  const sumStar = data?.rating.reduce((sum, i) => sum + +i.star, 0);
+  data.totalRating = Math.round((sumStar * 10) / countRating) / 10;
 
   console.log(Math.round((sumStar * 10) / countRating) / 10)
   // console.log(Math.round((sumStar * 10) / countRating) / 10);
-  await ratingProduct.save();
+  await data.save();
   return res.status(200).json({
     status: true,
-    ratingProduct,
+    data,
   });
 });
 // updateProduct
@@ -183,26 +185,54 @@ const uploadThumbnailProduct = asyncHandler(async (req, res) => {
 
 
 
-const checkRate = asyncHandler(async (req, res) => {
-
-  const { _id } = req.user
-  const { pid } = req.body
-
-  const response = await Product.find()
-
-  const userRate = response.rating?.map(item => item.posterBy == _id)
-
-
-  if (userRate && userRate?.length > 0) {
-    return res.json({
-      userId: _id
+// @desc Recommend products
+// @route GET /api/products/recommend/:q
+// @access Private
+ const recommendProduct = asyncHandler(async (req, res) => {
+  console.log(req.params.q)
+  const productId = req.params.q;
+  let response = [];
+  try {
+    const productRating = await Product.find({
+      rating: {
+        $elemMatch: { posterBy: req.user._id }
+      }
     })
-  } else {
-    return res.json({
-      productId: pid
-    })
+   
+
+    if (
+      productRating == null ||
+      productRating == undefined ||
+      productRating.length == 0
+    ) {
+      const recommend = await axios.get(
+        `http://127.0.0.1:5500/nonrating?q=${productId}`
+      );
+
+      response = await Product.find({
+        _id: { $in: recommend?.data?.response },
+      }).populate({ path: 'category', populate: { path: 'branch', model: 'Brand' } });
+
+    } else {
+      const recommend = await axios.get(`http://127.0.0.1:5500/?q=${req.user._id}`);
+      
+      
+      response = await Product.find({
+        _id: { $in: recommend?.data?.response },
+      }).populate({ path: 'category', populate: { path: 'branch', model: 'Brand' } })
+
+      console.log(response)
+    }
+    
+    if (response.length !== 0) {
+      res.json({ success: true, products: response });
+    } else {
+      res.status(500).json({ success: false, Products: [] });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false });
   }
-
 })
 
 
@@ -217,5 +247,5 @@ module.exports = {
   uploadImageProduct,
   uploadThumbnailProduct,
   addSize,
-  checkRate
+  recommendProduct
 };

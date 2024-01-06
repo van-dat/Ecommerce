@@ -17,7 +17,7 @@ const Login = ({ register, forgot }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const initState = {
-    firstname: "",
+    firstname: "",  
     lastname: "",
     email: "",
     mobile: "",
@@ -228,7 +228,7 @@ const Login = ({ register, forgot }) => {
                   Đăng ký
                 </span>
               </div>
-              <div className=" w-full flex gap-6 mb-3">
+              {/* <div className=" w-full flex  gap-6 mb-3">
                 <div className="flex-1 rounded-sm shadow-md cursor-pointer hover:opacity-80  flex bg-blue-700 items-center text-white justify-center gap-2 py-2 ">
                   <FaFacebook size={24} />
                   <span className="text-xl font-bold">Facebook</span>
@@ -237,7 +237,7 @@ const Login = ({ register, forgot }) => {
                   <FcGoogle size={24} />
                   <span className="text-xl font-bold">Google</span>
                 </div>
-              </div>
+              </div> */}
             </>
           )}
 

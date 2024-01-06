@@ -1,15 +1,19 @@
 import { useState } from "react";
 import icons from "../ultils/icon";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { search } from "../store/Slice/appSlice";
 
 const { IoCloseOutline, BiSearch } = icons;
 
 const Search = ({ data }) => {
+
+  const { product } = useSelector(state => state.app)
+
+  
   const dispatch = useDispatch()
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
 
@@ -17,14 +21,14 @@ const Search = ({ data }) => {
     const results = data?.filter(item =>
       item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    console.log(results)
-
     dispatch(search(results))
   };
 
 
-  console.log(searchTerm)
-
+  const setSearchTerm = (e) => {
+    setSearchValue(e)
+  }
+  console.log(searchValue)
 
   return (
     <div>
@@ -36,7 +40,7 @@ const Search = ({ data }) => {
         <button onClick={handleSearch} className="px-2 outline-none">
           <BiSearch size={24} />
         </button>
-        <div className="w-[95%] h-full flex ">
+        <div className="w-full h-full flex ">
           <input
             className="!outline-none border-none bg-transparent w-[90%] !focus:!outline-0 focus:!shadow-none focus:!border-0 text-sm text-ellipsis"
             type="text"

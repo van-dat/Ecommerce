@@ -1,12 +1,26 @@
 import Slider from "react-slick";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, memo } from "react";
-import { BreadCrumb, SelectDetail } from "../../components";
+import { BreadCrumb, Product, Rating, SelectDetail } from "../../components";
+import imageLogo from '../../assets/img/icon_logo.svg'
+import icons from "../../ultils/icon";
+import { getOneProduct, optionRating } from "../../store/action";
+import * as apis from '../../apis'
+import { toast } from "react-toastify";
 
+
+
+const { IoIosCloseCircleOutline, AiFillStar } = icons
 const DetailsProduct = () => {
-  const { oneProduct } = useSelector((state) => state.product);
-  const [Hidden, setHidden] = useState(0);
 
+  const dispatch = useDispatch()
+  const { oneProduct, recommend } = useSelector((state) => state.product);
+  const [Hidden, setHidden] = useState(0);
+  const [ShowBtn, setShowBtn] = useState(false);
+  const [comment, setComment] = useState('');
+  const [checkStar, setCheckStar] = useState(null);
+
+  console.log(recommend)
   const settings = {
     dots: true,
     infinite: true,
@@ -18,65 +32,96 @@ const DetailsProduct = () => {
     mobileFirst: true,
     arrows: false,
   };
+
+
+
+  const handleRating = () => {
+    setShowBtn(true)
+  }
+
+  const handleChoseStar = (e) => {
+    setCheckStar(e)
+  }
+  const handleEvaluation = async () => {
+
+    if (!checkStar) return toast.warning('Vui chọn chất lượng của sản phẩm')
+    const response = await apis.apiCreateRating({ star: checkStar, comment: comment, pid: oneProduct._id })
+    if (response.status) {
+      setComment('')
+      setCheckStar(null)
+      setShowBtn(false)
+      dispatch(getOneProduct(oneProduct._id))
+      toast.success('Đánh giá sản phẩm thành công')
+    }
+  }
+
+
   return (
     <>
       {oneProduct && (
         <div className="bg-content">
           <div className="md:container md:mx-auto mt-[165px] pb-[50px]  ">
             <BreadCrumb />
-            <div className="flex gap-4 ">
-              <div className=" w-[40%] items-center bg-white p-4 ">
+            <div className="grid grid-cols-6 gap-4 ">
+              <div className=" col-span-2 items-center bg-white shadow-md  max-h-[570px] p-4 ">
                 <Slider {...settings}>
                   {oneProduct?.thumbnail?.map((i, index) => (
                     <div key={index} className="flex items-center focus:outline-none">
                       <img
                         src={i}
                         alt="slider"
-                        className="w-full focus:outline-none object-contain"
+                        className="w-full  focus:outline-none object-contain"
                       />
                     </div>
                   ))}
                 </Slider>
               </div>
-              <SelectDetail isShow />
+              <div className="flex col-span-4 max-h-[570px] shadow-md">
+                <SelectDetail isShow />
+              </div>
             </div>
             {/* <div className="inline-flex px-3 py-1 border-[1px] ">
             <span>Sản phẩm yêu thích</span>
             <span className="hidden">Đã thêm vào yêu thích</span>
           </div> */}
-            <div className="flex flex-col mt-4 bg-white">
+            <div className="flex flex-col mt-4 bg-white shadow-md mb-4">
               <div className="flex font-semibold text-md items-center bg-content  w-full  ">
                 <div
                   onClick={() => setHidden(0)}
-                  className={`py-2 text-center border px-4 cursor-pointer rounded-sm ${
-                    Hidden === 0
-                      ? "border-t-2 border-t-red-800 border-b-0 border-r-0 bg-white "
-                      : " "
-                  }`}
+                  className={`py-2 text-center border px-4 cursor-pointer rounded-sm ${Hidden === 0
+                    ? "border-t-2 border-t-red-800 border-b-0 border-r-0 bg-white "
+                    : " "
+                    }`}
                 >
                   Mô tả
                 </div>
                 <div
                   onClick={() => setHidden(1)}
-                  className={`py-2 text-center border px-4 cursor-pointer  border-r-0 rounded-sm ${
-                    Hidden === 1 ? "border-t-2 border-t-red-800 border-b-0 border-x-0 bg-white" : ""
-                  }`}
+                  className={`py-2 text-center border px-4 cursor-pointer  border-r-0 rounded-sm ${Hidden === 1 ? "border-t-2 border-t-red-800 border-b-0 border-x-0 bg-white" : "border"
+                    }`}
                 >
                   Chính sách thanh toán
                 </div>
+
                 <div
                   onClick={() => setHidden(2)}
-                  className={`py-2 text-center border px-4 cursor-pointer rounded-sm ${
-                    Hidden === 2 ? "border-t-2 border-t-red-800 border-b-0 bg-white " : ""
-                  }`}
+                  className={`py-2 text-center border px-4 cursor-pointer border-r-0 rounded-sm ${Hidden === 2 ? "border-t-2 border-t-red-800 border-r-0 border-b-0 bg-white " : ""
+                    }`}
                 >
                   Chính sách đổi trả
+                </div>
+                <div
+                  onClick={() => setHidden(3)}
+                  className={`py-2 text-center border px-4  cursor-pointer rounded-sm ${Hidden === 3 ? "border-t-2 border-t-red-800 border-b-0 border-l-0 bg-white " : ""
+                    }`}
+                >
+                  Đánh giá
                 </div>
               </div>
 
               <div className="w-full ">
                 {Hidden === 0 && (
-                  <div className="flex p-4 text-sm font-bold flex-col gap-4">
+                  <div className="flex p-4 shadow-md text-sm font-bold flex-col gap-4">
                     <span className=" text-md font-bold  ">{oneProduct.title}</span>
                     <span>description</span>
                     <span>
@@ -103,7 +148,7 @@ const DetailsProduct = () => {
                 )}
 
                 {Hidden === 1 && (
-                  <div className="flex p-4 text-sm  font-bold flex-col gap-4 ">
+                  <div className="flex p-4 shadow-md text-sm  font-bold flex-col gap-4 ">
                     <span>1.Giới thiệu </span>
                     <span className="font-medium">
                       Chào mừng quý khách hàng đến với website của Shoes Store
@@ -157,8 +202,8 @@ const DetailsProduct = () => {
                     </span>
                   </div>
                 )}
-                { Hidden === 2 &&
-                  <div className="flex p-4 text-sm font-medium flex-col gap-4 ">
+                {Hidden === 2 &&
+                  <div className="flex p-4 shadow-md text-sm font-medium flex-col gap-4 ">
                     <span className="font-bold">
                       Shoes Store luôn trân trọng sự tín nhiệm của quý khách giành cho chúng tôi.
                       Chính vì vậy, chúng tôi luôn cố gắng để mang đến quý khách hàng những sản phẩm
@@ -254,7 +299,55 @@ const DetailsProduct = () => {
                     </span>
                   </div>
                 }
+                {Hidden === 3 &&
+                  <div className="flex p-4 shadow-md  text-sm font-medium flex-col gap-4 ">
+                    {!ShowBtn && <Rating rating={oneProduct?.totalRating} totalUserRating={oneProduct?.rating} />}
+                    {ShowBtn &&
+                      <div className="flex w-full justify-center items-center">
+                        <div className="flex p-4 border w-1/2 flex-col rounded-md text-sm  font-medium ">
+                          <div className="flex justify-end w-full">
+                            <span onClick={() => setShowBtn(false)} className="hover:text-white hover:bg-red-500 p-1 rounded-full cursor-pointer"><IoIosCloseCircleOutline size={23} /></span>
+                          </div>
+                          <div className="flex justify-center w-full items-center mb-4">
+                            <img src={imageLogo} alt=" logo" className="h-[100px] w-[100px] object-contain" />
+                          </div>
+                          <div className="w-full">
+                            <textarea class="w-full border-[#ddd] h-[100px] min-h-[50px] text-sm" value={comment} onChange={(e) => { setComment(e.target.value) }} placeholder="Xin mời chia sẻ một số cẩm nhận về sản phẩm" id="floatingTextarea2"></textarea>
+                          </div>
+                          <div className="flex flex-col gap-4 justify-center items-center">
+                            <span>Nhận xét về sản phẩm của chúng tôi</span>
+                            <div className="flex gap-4 justify-center items-center">
+                              {optionRating?.map(item => (
+                                <div key={item} onClick={() => handleChoseStar(item.code)} className="flex gap-1 cursor-pointer">
+                                  <span className={checkStar == item.code ? 'text-orange-400' : 'text-gray-500'}>
+                                    <AiFillStar size={18} />
+                                  </span>
+                                  <span className="hidden lg:flex">{item.value}</span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="w-full">
+                              <button onClick={() => handleEvaluation()} type="button" className="btn w-full rounded-md text-white text-md font-semibold  py-1 px-4 bg-red-500 ">Gửi đánh giá</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    {!ShowBtn &&
+                      <div className="flex md:container md:mx-auto justify-center items-center flex-col gap-2">
+                        <span>Bạn đánh giá gì về sản phẩm này</span>
+                        <button type="button" onClick={() => handleRating()} className="btn py-2 px-4 rounded-md text-md text-white font-medium bg-red-500"> Đánh giá ngay</button>
+                      </div>
+                    }
+                  </div>
+                }
               </div>
+            </div>
+            <div className="bg-white p-4 mb-2">
+              <div className='border-l-4 uppercase border-l-black  text-xl font-bold p-2  mb-2 '>
+                SẢN PHẨM LIÊN QUAN
+              </div>
+              <div><Product data={recommend} css  /></div>
             </div>
           </div>
         </div>

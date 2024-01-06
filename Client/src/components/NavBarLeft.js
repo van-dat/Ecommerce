@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 const maxCost = 10000000;
+const minCost = 0;
 const { HiMinus, HiMiniPlus } = icons;
 const active = "flex items-center gap-3 px-4 text-main-300 py-1 ";
 const noActive = "flex items-center gap-3 px-4  py-1 hover:text-main-300 ";
@@ -25,7 +26,7 @@ const NavBarLeft = () => {
   const [isHidden, setisHidden] = useState(true);
   const [isHiddenSize, setisHiddenSize] = useState(true);
 
-  const [percent1, setPercent1] = useState(0);
+  const [percent1, setPercent1] = useState(minCost);
   const [percent2, setPercent2] = useState(maxCost);
   const [Size, setSize] = useState();
   const [selectedValues, setSelectedValues] = useState([]);

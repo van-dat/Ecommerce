@@ -9,6 +9,7 @@ export { default as Confirm } from "./confirm";
 export { default as ResetPass } from "./resetPass";
 export { default as Cart } from "./cart";
 export { default as Payment } from "./Payment";
+export { default as Footer } from "./Footer";
 
 
 

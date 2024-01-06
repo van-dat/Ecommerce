@@ -29,6 +29,13 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import { LuEye } from "react-icons/lu";
 import { RiAdminLine } from "react-icons/ri";
 import { LuClipboardEdit } from "react-icons/lu";
+import { AiFillStar } from "react-icons/ai";
+import { AiOutlineStar } from "react-icons/ai";
+import { IoCheckmarkCircle } from "react-icons/io5";
+import { CiLocationOn } from "react-icons/ci";
+import { RiTelegramLine } from "react-icons/ri";
+import { CiMail } from "react-icons/ci";
+import { BsPrinter } from "react-icons/bs";
 
 
  const icons = {
@@ -66,7 +73,15 @@ import { LuClipboardEdit } from "react-icons/lu";
     IoIosCloseCircleOutline,
     LuEye,
     RiAdminLine,
-    LuClipboardEdit
+    LuClipboardEdit,
+    AiFillStar,
+    AiOutlineStar,
+    IoCheckmarkCircle,
+    CiLocationOn,
+    RiTelegramLine,
+    CiMail,
+    BsPrinter
+    
 
 
 

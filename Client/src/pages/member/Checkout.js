@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import imageCart from '../../assets/img/cart.gif'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import * as apis from '../../apis'
 import { fnPrice } from '../../ultils/fn'
 import icons from '../../ultils/icon'
@@ -8,18 +8,20 @@ import { Payment } from '../public'
 import { AddressSelector } from '../../components'
 import { useNavigate } from 'react-router-dom';
 import Path from '../../ultils/path'
+import { getCurrentUser } from '../../store/action'
+import Swal from 'sweetalert2'
+import { toast } from 'react-toastify'
 
-const { TbArrowBackUp} = icons
+const { TbArrowBackUp } = icons
 
 
 const Checkout = () => {
+
+    const dispatch = useDispatch()
     const history = useNavigate();
-    const { cart, methodPayment,address } = useSelector(state => state.cart)
-    console.log(methodPayment)
-    // const [dataPayment, setDataPayment] = useState([]);
+    const { cart, methodPayment, address } = useSelector(state => state.cart)
     const [totalPrice, setTotalPrice] = useState(0);
 
-    console.log(cart)
     useEffect(() => {
         let total = 0;
 
@@ -34,15 +36,22 @@ const Checkout = () => {
         }
         setTotalPrice(total)
 
-
-
-
-
     }, [cart]);
-  
+
+    const handleOrder = async () => {
+        if(address == '') return toast.warning('Vui lòng nhập địa chỉ nhận hàng')
+        const response = await apis.apiCreateOrder({ products: cart, total: totalPrice, paymentIntent: methodPayment[0]?.method, address, note: methodPayment[0]?.note, status: 'Pending' })
+        if (response.status) {
+            dispatch(getCurrentUser())
+            Swal.fire({ text: 'Thanh toán thành công', icon: 'success' }).then(() => history(`/${Path.CART}`))
+        }
+
+    }
+
+
     return (
         <div className='flex md:container md:mx-auto h-screen items-center max-h-screen overflow-y-auto relative'>
-            <div onClick={() => { history(`/${Path.CART}`) }} className=' cursor-pointer absolute top-10 left-0 px-6 py-2 rounded-md bg-main-100 text-white'><TbArrowBackUp size={23}/></div>
+            <div onClick={() => { history(`/${Path.CART}`) }} className=' cursor-pointer absolute top-10 left-0 px-6 py-2 rounded-md bg-main-100 text-white'><TbArrowBackUp size={23} /></div>
             <div className='grid grid-cols-2 gap-4 flex-row w-full '>
                 <div className='col-span-1'>
                     <img src={imageCart} alt="cart" />
@@ -88,7 +97,14 @@ const Checkout = () => {
                         <AddressSelector />
                     </div>
                     {methodPayment[0]?.method == 'Thanh toán bằng Paypal' &&
-                        <Payment payload={{ products: cart, total: totalPrice, paymentIntent: methodPayment[0]?.method, address,note:methodPayment[0]?.note  }} amount={Math.round(totalPrice / 23500)} />
+                        <Payment payload={{ products: cart, total: totalPrice, paymentIntent: methodPayment[0]?.method, address, note: methodPayment[0]?.note, status: 'Success' }} amount={Math.round(totalPrice / 23500)} />
+                    }
+
+
+                    {methodPayment[0]?.method == 'Thanh toán khi nhận hàng' &&
+                        <div className='w-full'>
+                            <button onClick={() => handleOrder()} type='button' className='w-full rounded-md text-white font-semibold btn px-4 py-1 bg-red-500'>Đặt hàng </button>
+                        </div>
                     }
 
                 </div>

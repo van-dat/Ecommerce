@@ -44,6 +44,34 @@ export const getCurrentUser = createAsyncThunk("/current", async (data, rejectWi
 });
 
 
+export const getMaterial = createAsyncThunk("/material", async (data, rejectWithValue) => {
+  const response = await apis.apiGetMaterial();
+  if (!response.success) return rejectWithValue(response)
+  return response.rs
+});
+export const getRecommend = createAsyncThunk("/recommend", async (q, rejectWithValue) => {
+  const response = await apis.apiRecommend(q);
+  console.log(response)
+  if (!response.success) return rejectWithValue(response)
+  return response.products
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const valueRole = [{
   value: 'user',
@@ -60,7 +88,7 @@ export const valueStatus = [{
 {
   value: 'InActive',
   code: false
-}] 
+}]
 
 export const optionsPayment = [{
   title: 'Thanh toán khi nhận hàng',
@@ -69,12 +97,50 @@ export const optionsPayment = [{
 {
   title: 'Thanh toán bằng Paypal',
   value: 'Thanh toán bằng Paypal'
-}] 
+}]
+
+
+export const optionRating = [
+  {
+    code: 1,
+    value : 'Rất tệ'
+  },
+  {
+    code: 2,
+    value : 'Tệ'
+  },
+  {
+    code: 3,
+    value : 'Bình thường'
+  },
+  {
+    code: 4,
+    value : 'Tốt'
+  },
+  {
+    code: 5,
+    value : 'Rất tốt'
+  },
+]
+
+export const optionsStatus = [
+  { 
+    value: 'Pending',
+    label: "Pending"
+  },
+  {
+    value:  'Processing',
+    label: "Processing"
+  },
+  {
+    value:  'Success',
+    label: "Success"
+  },
+  {
+    value:  'Canceled',
+    label: "Canceled"
+  }
+];
 
 
 
- export const getMaterial = createAsyncThunk("/material", async (data, rejectWithValue) => {
-  const response = await apis.apiGetMaterial();
-  if (!response.success) return rejectWithValue(response)
-  return response.rs
-});

@@ -14,14 +14,14 @@ const orderSchema = new mongoose.Schema({
   ],
   status: {
     type: String,
-    default: 'processing',
-    enum: ['canceled', 'processing', 'success']
+    default: 'Processing',
+    enum: ['Pending', 'Canceled', 'Processing', 'Success']
   },
   address: String,
   total: Number,
   paymentIntent: String
   ,
-  note:String,
+  note: String,
   orderBy: {
     type: mongoose.Types.ObjectId,
     ref: 'User',

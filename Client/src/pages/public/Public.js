@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { Header } from "../../components";
 import {Model} from '../../components/'
 import { useSelector } from "react-redux";
+import Footer from "./Footer";
 
 const Public = () => {
   const {isHidden} = useSelector(state => state.app)
@@ -14,6 +15,9 @@ const Public = () => {
         </div>
         <div className="bg-content">
           <Outlet />
+        </div>
+        <div className="bg-black">
+          <Footer/>
         </div>
       </div>
      { isHidden && <Model />}

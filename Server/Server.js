@@ -14,9 +14,10 @@ const app = express()
 const server = http.createServer(app)
 const io =  initSocketIO(server)
 app.use(cors({
-    origin : process.env.CLIENT_URL,
+    origin :['http://localhost:3000', 'http://localhost:5500'],
     methods : ['POST', 'GET', 'PUT', 'DELETE'],
-    credentials: true
+    credentials: true,
+    optionSuccessStatus:200
 }))
 const port = process.env.PORT || 8888
 // const hostname = '192.168.10.135';

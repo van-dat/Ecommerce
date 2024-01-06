@@ -24,7 +24,7 @@ const Details = () => {
 
 
   return (
-    <div className="flex flex-col bg-white mt-[165px] ">
+    <div className="flex flex-col bg-white mt-[165px] py-10 ">
       <div className="md:container mx-auto flex mt-2">
         <BreadCrumb />
       </div>
@@ -56,8 +56,8 @@ const Details = () => {
               </div>
             </div>
 
-            <Product data={product?.product} css />
-            <div className="flex justify-center w-full mt-6">
+            <Product data={product?.product} css  styleImage />
+            <div className="flex justify-center w-full mt-10">
               <Pagination totalPage={product.counts}
                 setPage={setPage} />
             </div>

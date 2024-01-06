@@ -18,9 +18,8 @@ const SelectDetail = ({ isShow }) => {
     const navigate = useNavigate();
     const { size } = useSelector((state) => state.app);
     const { oneProduct } = useSelector((state) => state.product);
-    const { user } = useSelector((state) => state.auth);
-
     console.log(oneProduct)
+    const { user } = useSelector((state) => state.auth);
     const Dispatch = useDispatch();
     const [Select, setSelect] = useState(36);
     const [Number, setNumber] = useState(1);
@@ -31,7 +30,7 @@ const SelectDetail = ({ isShow }) => {
 
 
 
-    
+
 
     const handlerSelect = (e) => {
         setSelect(e);
@@ -55,22 +54,27 @@ const SelectDetail = ({ isShow }) => {
     }
 
     const handlePaymentNow = () => {
-      const data = []
+        const data = []
 
-      data.push({products:oneProduct, quantity: 1, })
+        data.push({ products: oneProduct, quantity: 1, })
     }
-    
+
 
     return (
-        <div className="flex-1 p-4  flex flex-col gap-3 bg-white justify-start h-full py-6 text-md font-medium  capitalize text-[#292929] ">
+        <div className="flex-1 p-4  flex flex-col gap-2 bg-white justify-start h-full py-6 text-md font-medium  capitalize text-[#292929] ">
             <span className="font-semibold">{oneProduct?.title}</span>
+
             <span>
                 Tình trạng:{" "}
                 <span className="text-white">
-                    {oneProduct?.quantity > 0 && <span className="py-[2px] px-3 text-xs rounded-md bg-green-500">Còn hàng</span> }
-                    {oneProduct?.quantity  < 1 && <span className="py-[2px] px-3 text-xs rounded-md bg-red-500">Hết hàng</span> }
+                    {oneProduct?.quantity > 0 && <span className="py-[2px] px-3 text-xs rounded-md bg-green-500">Còn hàng</span>}
+                    {oneProduct?.quantity < 1 && <span className="py-[2px] px-3 text-xs rounded-md bg-red-500">Hết hàng</span>}
                 </span>
             </span>
+            <div className="flex gap-2">
+                <span>Chất liệu:</span>
+                <span>{oneProduct.material}</span>
+            </div>
             <span className="text-main-200 font-bold">{`${fnPrice(oneProduct?.price)}₫`}</span>
             <span className="text-[#6a6a6a]">Kích thước: {Select}</span>
             <div className="flex gap-3 flex-wrap items-center">
@@ -103,7 +107,7 @@ const SelectDetail = ({ isShow }) => {
                 <div onClick={handleAddCart} className=" disabled:opacity-75 border-btn border-[1px] select-none flex w-1/2 py-3 bg-red-100 p-2 rounded-sm text-sm font-semibold text-main-100 cursor-pointer items-center gap-2 hover:bg-red-50">
                     <RiShoppingCartLine size={20} /> <span>Thêm vào giỏ hàng</span>
                 </div>
-                <div onClick={()=> handlePaymentNow()} className="  bg-main-100 select-none text-white text-center flex w-1/2 py-3 p-2 rounded-sm text-sm font-semibold  cursor-pointer items-center justify-center hover:bg-btn">
+                <div onClick={() => handlePaymentNow()} className="  bg-main-100 select-none text-white text-center flex w-1/2 py-3 p-2 rounded-sm text-sm font-semibold  cursor-pointer items-center justify-center hover:bg-btn">
                     <span>+ Mua ngay</span>
                 </div>
             </div>

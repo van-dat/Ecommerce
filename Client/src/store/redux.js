@@ -20,7 +20,7 @@ const commonConfig = {
 const persistConfig = {
   key: 'product',
   storage,
-  whitelist: ['oneProduct', 'reviewProduct']
+  whitelist: ['oneProduct', 'reviewProduct', 'recommend']
 }
 const authPersist = {
   key: 'auth',

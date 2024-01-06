@@ -7,7 +7,8 @@ const ProductSlice = createSlice({
   name: 'product',
   initialState: {
     oneProduct: null,
-    reviewProduct: []
+    reviewProduct: [],
+    recommend: null
   },
   reducers: {
     review: (state, action) => {
@@ -18,7 +19,6 @@ const ProductSlice = createSlice({
       const isDuplicate = state.reviewProduct?.some(existingReview => (
         existingReview == newReview
       ));
-        console.log(isDuplicate)
       if (isDuplicate) {
 
         const data = state.reviewProduct.filter(item => item != newReview)
@@ -34,24 +34,35 @@ const ProductSlice = createSlice({
 
   },
   extraReducers: (builder) => {
-    // Bắt đầu thực hiện action login (Promise pending)
+
     builder.addCase(actions.getOneProduct.pending, (state) => {
       // Bật trạng thái loading
       state.isLoading = true;
     });
-    // Khi thực hiện action login thành công (Promise fulfilled)
+
     builder.addCase(actions.getOneProduct.fulfilled, (state, action) => {
-      // Tắt trạng thái loading, lưu thông tin user vào store
+
       state.isLoading = false;
       state.oneProduct = action.payload;
     });
 
     // Khi thực hiện action login thất bại (Promise rejected)
     builder.addCase(actions.getOneProduct.rejected, (state, action) => {
-      // Tắt trạng thái loading, lưu thông báo lỗi vào store
+
       state.isLoading = false;
       state.errorMessage = action.payload.message;
     });
+
+    // recomnmend
+    builder.addCase(actions.getRecommend.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(actions.getRecommend.fulfilled, (state, action) => {
+      console.log(action.payload)
+      state.recommend = action.payload;
+    });
+   
+
   }
 })
 export const { review } = ProductSlice.actions

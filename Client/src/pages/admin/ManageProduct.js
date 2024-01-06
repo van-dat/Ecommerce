@@ -61,8 +61,6 @@ const ManageProduct = () => {
 
 
 
-
-  console.log(dataProduct)
   return (
     <div className='flex flex-col'>
       <div className='p-4 mb-4 flex justify-between items-center  text-2xl font-semibold bg-white rounded-md'>
