@@ -17,10 +17,10 @@ const Product = ({ data, css, styleImage }) => {
 
   const handleClickNext = (pid, title, slug) => {
     navigate(`/${title}/${slug}`),
-    Dispatch(getRecommend(pid))
-      Dispatch(getOneProduct(pid)),
+      Dispatch(getRecommend(pid))
+    Dispatch(getOneProduct(pid)),
       Dispatch(getSize())
-      Dispatch(review(pid))
+    Dispatch(review(pid))
   }
 
   const handleClickModel = (pid) => {
@@ -51,16 +51,15 @@ const Product = ({ data, css, styleImage }) => {
                   <img
                     src={i?.thumbnail}
                     alt="thumbnail"
-                    className={`w-full object-center   hover:scale-110 ease-in-out duration-2000  cursor-pointer ${styleImage?'h-[250px]':'h-[300px]'}`}
+                    className={`w-full object-center   hover:scale-110 ease-in-out duration-2000  cursor-pointer ${styleImage ? 'h-[250px]' : 'h-[300px]'}`}
                     onClick={() => handleClickNext(i._id, i.category.slug, i.slug)}
                   />
                 </div>
                 <div className="flex flex-col z-40 gap-3 capitalize font-medium cursor-default mb-4">
                   <span className="text-sm  px-2 line-clamp-2">{i?.title}</span>
                   <div className="flex justify-between ">
-                  <span className="text-sm px-2 text-main-100 font-semibold">{fnPrice(i?.price)} ₫</span>
-                  <span className="text-sm px-2 flex  ">{showRating(i.totalRating)}</span>
-
+                    <span className="text-sm px-2 text-main-100 font-semibold">{fnPrice(i?.price)} ₫</span>
+                    <span className="text-sm px-2 flex  ">{showRating(i.totalRating)}</span>
                   </div>
                 </div>
                 <div

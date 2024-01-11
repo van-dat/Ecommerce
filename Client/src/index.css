@@ -34,8 +34,9 @@ button.slick-prev {
 button.slick-prev::before {
   content: "\276E";
   padding: 20px 25px;
+  padding: 20px 25px;
   background-color: rgba(117, 115, 115, 0.2);
-  color: white;
+  color: #464646;
   border-radius: 50%;
 }
 

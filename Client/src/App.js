@@ -6,7 +6,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { AdminLayout, CreateProduct, DashBoard, ManageOrder, ManageProduct, ManageUser } from "./pages/admin";
-import { MemberLayout, Personal, Checkout } from "./pages/member";
+import { MemberLayout, Personal, Checkout, Purchase, Account } from "./pages/member";
+import { CalendarFull } from "./pages/admin/components";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,22 +37,27 @@ function App() {
             <Route path={Path.CART} element={<Cart />} />
           </Route>
           <Route path={Path.CONFIRM} element={<Confirm />} />
-          
+
           <Route path={Path.CHECKOUT} element={<Checkout />} />
 
           {/* admin */}
           <Route path={Path.ADMIN} element={<AdminLayout />} >
+            <Route path={Path.DEFAULT} element={<DashBoard />} />
             <Route path={Path.DASH_BOARD} element={<DashBoard />} />
             <Route path={Path.MANAGE_USER} element={<ManageUser />} />
             <Route path={Path.MANAGE_PRODUCT} element={<ManageProduct />} />
             <Route path={Path.MANAGE_ORDER} element={<ManageOrder />} />
             <Route path={Path.CREATE_PRODUCT} element={<CreateProduct />} />
+            <Route path={Path.CALENDAR} element={<CalendarFull />} />
+
 
           </Route>
           {/* member */}
           <Route path={Path.MEMBER} element={<MemberLayout />} >
             <Route path={Path.PERSONAL} element={<Personal />} />
-            
+            <Route path={Path.ACCOUNT} element={<Account />} />
+            <Route path={Path.PURCHASE} element={<Purchase />} />
+
           </Route>
 
         </Routes>

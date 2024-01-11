@@ -21,8 +21,6 @@ const { HiMiniPlus, HiMinus, MdOutlineDelete, PiShoppingCartThin } = icons
 
 const Cart = () => {
 
-
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { user } = useSelector(state => state.auth)
@@ -32,9 +30,7 @@ const Cart = () => {
     const [paymentIntent, setPaymentIntent] = useState([]);
     const [review, setReview] = useState([]);
 
-
     const [listProductPayment, setListProductPayment] = useState([]);
-
 
     const fetchData = async (pid) => {
         const response = await apis.apiOneProduct(pid);
@@ -68,20 +64,23 @@ const Cart = () => {
         }
     }
 
-    const handleReduce = async (e) => {
-        const response = await apis.apiUpdateQuantity({ id: e, action: 0 })
+    const handleReduce = async (e, pid) => {
+        const response = await apis.apiUpdateQuantity({ id: e, action: 0, pid })
         if (response.result == 'ok') {
             dispatch(getCurrentUser())
-
+        }else {
+            toast.warning(response.msg)
+            dispatch(getCurrentUser())
         }
     }
 
 
-    const handleIncrease = async (e) => {
-        const response = await apis.apiUpdateQuantity({ id: e, action: 1 })
+    const handleIncrease = async (e, pid) => {
+        console.log(pid)
+        const response = await apis.apiUpdateQuantity({ id: e, action: 1, pid })
         if (response.result == 'ok') {
-            dispatch(getCurrentUser())
 
+            dispatch(getCurrentUser())
         }
     }
 
@@ -95,13 +94,13 @@ const Cart = () => {
         const response = await apis.apiRemoveItemCart({ id: e })
         if (response.result == true) {
             dispatch(getCurrentUser())
-
         }
     }
     // payment
     const handlePayment = () => {
         const data = []
         if (listProductPayment?.length < 1) {
+            if(listProductPayment)
             return toast.warning('Vui lòng chọn sản phẩm để thanh toán ')
         }
         if (paymentIntent?.length < 1) {
@@ -109,15 +108,12 @@ const Cart = () => {
         }
         dispatch(cartCurrent(listProductPayment))
         navigate(`/${Path.CHECKOUT}`)
-         data.push({method: paymentIntent[0].title,note:note })
+        data.push({ method: paymentIntent[0].title, note: note })
         dispatch(getMethodPayment(data))
-
-
-
         setPaymentIntent([])
     }
 
-    console.log(reviewProduct)
+    console.log(user)
 
     return (
         <div className='mt-[165px] md:container md:mx-auto '>
@@ -159,13 +155,13 @@ const Cart = () => {
                                                     <div className='flex items-center   gap-6 select-none justify-center flex-1'>
                                                         <div className=" border-[1px]  flex items-center">
                                                             <span
-                                                                onClick={() => handleIncrease(i._id)}
+                                                                onClick={() => handleIncrease(i._id, i.product._id)}
                                                                 className="py-1  px-2 cursor-pointer"
                                                             >
                                                                 <HiMinus />
                                                             </span>
                                                             <span className=" py-1 border-r border-l text-center w-[40px] select-none">{i.quantity}</span>
-                                                            <span onClick={() => handleReduce(i._id)} className="py-1 px-2 cursor-pointer ">
+                                                            <span onClick={() => handleReduce(i._id,i.product._id)} className="py-1 px-2 cursor-pointer ">
                                                                 <HiMiniPlus />
                                                             </span>
                                                         </div>
@@ -194,7 +190,7 @@ const Cart = () => {
                         </h5>
                         <div className="flex justify-between items-center py-3 border-b">
                             <h5 className="capitalize font-semibold ">Tổng tiền:</h5>
-                            <span className="text-red-600 font-semibold ">{fnPrice(totalPrice(user, selectedValues))||'0'}₫</span>
+                            <span className="text-red-600 font-semibold ">{fnPrice(totalPrice(user, selectedValues)) || '0'}₫</span>
                         </div>
                         <div className="flex py-3 flex-col gap-3">
                             <h5 className=" font-semibold ">Ghi chú đơn hàng</h5>
@@ -231,7 +227,6 @@ const Cart = () => {
                 </div>
                 <Product css
                     data={review}
-                  
                 />
             </div>
 

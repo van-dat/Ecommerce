@@ -13,10 +13,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const [isActive, setIsActive] = useState(false);
   const [isProduct, setIsProduct] = useState(false);
 
-  // close on click outside
-
-
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = (keyCode) => {
       if (!sidebarOpen || keyCode !== 27) return;
@@ -80,7 +76,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   return (
                     <React.Fragment>
                       <NavLink
-                        to="#"
+                        to={Path.DASH_BOARD}
                         className={`group relative flex items-center
                          gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === Path.ADMIN ||
                             pathname.includes('dashboard')) &&
@@ -160,8 +156,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               {/* <!-- Menu Item Calendar --> */}
               <li>
                 <NavLink
-                  to="/calender"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
+                  to={Path.CALENDAR}
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('admin/calendar')} &&
                     'bg-graydark dark:bg-meta-4'
                     }`}
                 >

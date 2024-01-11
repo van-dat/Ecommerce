@@ -11,6 +11,9 @@ import Path from '../../ultils/path'
 import { getCurrentUser } from '../../store/action'
 import Swal from 'sweetalert2'
 import { toast } from 'react-toastify'
+import Select from 'react-dropdown-select'
+import { optionsPayment } from '../../store/action'
+
 
 const { TbArrowBackUp } = icons
 
@@ -21,6 +24,13 @@ const Checkout = () => {
     const history = useNavigate();
     const { cart, methodPayment, address } = useSelector(state => state.cart)
     const [totalPrice, setTotalPrice] = useState(0);
+    const [paymentIntent, setPaymentIntent] = useState([]);
+    console.log(methodPayment[0]?.method)
+
+    const onChangepaymentIntent = (data) => {
+
+        setPaymentIntent(data)
+    }
 
     useEffect(() => {
         let total = 0;
@@ -39,8 +49,8 @@ const Checkout = () => {
     }, [cart]);
 
     const handleOrder = async () => {
-        if(address == '') return toast.warning('Vui lòng nhập địa chỉ nhận hàng')
-        const response = await apis.apiCreateOrder({ products: cart, total: totalPrice, paymentIntent: methodPayment[0]?.method, address, note: methodPayment[0]?.note, status: 'Pending' })
+        if (address == '') return toast.warning('Vui lòng nhập địa chỉ nhận hàng')
+        const response = await apis.apiCreateOrder({ products: cart, total: totalPrice, paymentIntent: methodPayment[0]?.method || paymentIntent[0]?.title , address, note: methodPayment[0]?.note||'', status: 'Pending' })
         if (response.status) {
             dispatch(getCurrentUser())
             Swal.fire({ text: 'Thanh toán thành công', icon: 'success' }).then(() => history(`/${Path.CART}`))
@@ -63,7 +73,7 @@ const Checkout = () => {
                     {cart?.map((i, index) => (
                         <div key={index} className="  w-full flex items-center border-b py-2 gap-2  group">
                             <div className="flex w-full gap-3">
-                                <img src={i.product.thumbnail[0]} alt="image" className="object-contain w-[80px]" />
+                                <img src={i.product?.thumbnail[0]} alt="image" className="object-contain w-[80px]" />
 
                                 <div className='block w-full'>
                                     <div className="flex  flex-col text-sm gap-3 flex-2">
@@ -106,7 +116,36 @@ const Checkout = () => {
                             <button onClick={() => handleOrder()} type='button' className='w-full rounded-md text-white font-semibold btn px-4 py-1 bg-red-500'>Đặt hàng </button>
                         </div>
                     }
+                    {
+                        !methodPayment[0]?.method &&
+                        <>
+                            <div className="flex flex-col gap-3">
+                                <div className='flex flex-col gap-3 z-50'>
+                                    <label className='font-semibold' htmlFor="Material">Phương thức thanh toán:</label>
+                                    <Select
+                                        values={paymentIntent}
+                                        options={optionsPayment}
+                                        onChange={(values) => onChangepaymentIntent(values)}
+                                        labelField="title" valueField="title"
+                                        placeholder='Vui lòng chọn Phương thức thanh toán'
+                                        className
+                                    />
+                                </div>
+                                {paymentIntent[0]?.title == 'Thanh toán bằng Paypal' &&
+                                    <Payment payload={{ products: cart, total: totalPrice, paymentIntent: paymentIntent[0]?.title, address, note: methodPayment[0]?.note || '', status: 'Success' }} amount={Math.round(totalPrice / 23500)} />
+                                }
 
+                                {paymentIntent[0]?.title == 'Thanh toán khi nhận hàng' &&
+                                    <div className='w-full'>
+                                        <button onClick={() => handleOrder()} type='button' className='w-full rounded-md text-white font-semibold btn px-4 py-1 bg-red-500'>Đặt hàng </button>
+                                    </div>
+                                }
+                            </div>
+
+                        </>
+
+
+                    }
                 </div>
             </div>
         </div>

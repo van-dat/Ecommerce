@@ -1,7 +1,10 @@
 
 const { ObjectId } = require('mongoose').Types;
-const product = require('../Model/product');
 const Product = require("../Model/product");
+const Order = require("../Model/order");
+const User = require("../Model/user");
+
+
 const axios = require('axios');
 const asyncHandler = require("express-async-handler");
 
@@ -102,7 +105,7 @@ const rating = asyncHandler(async (req, res) => {
     );
   }
   const data = await Product.findById(pid);
- 
+
   const countRating = data?.rating.length;
   const sumStar = data?.rating.reduce((sum, i) => sum + +i.star, 0);
   data.totalRating = Math.round((sumStar * 10) / countRating) / 10;
@@ -182,14 +185,38 @@ const uploadThumbnailProduct = asyncHandler(async (req, res) => {
   });
 });
 
+// statistical
 
+
+const statistical = asyncHandler(async (req, res) => {
+
+  const {_id} = req.user
+  const order = await Order.find()
+  const payment = order.filter(item => item.status == 'Success')
+  const totalPayment = payment.map(item => item.total).reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0,
+  )
+    const user = await User.find()
+    const totalUser= user?.filter(item => item._id !== _id )?.length
+    const product = await Product.find()
+    const totalProduct = product.length
+    
+      return res.json({
+        status:true,
+        totalOrder: order.length,
+        totalPayment,
+        totalUser,
+        totalProduct
+      })
+  
+})
 
 
 // @desc Recommend products
 // @route GET /api/products/recommend/:q
 // @access Private
- const recommendProduct = asyncHandler(async (req, res) => {
-  console.log(req.params.q)
+const recommendProduct = asyncHandler(async (req, res) => {
   const productId = req.params.q;
   let response = [];
   try {
@@ -198,7 +225,7 @@ const uploadThumbnailProduct = asyncHandler(async (req, res) => {
         $elemMatch: { posterBy: req.user._id }
       }
     })
-   
+
 
     if (
       productRating == null ||
@@ -215,15 +242,15 @@ const uploadThumbnailProduct = asyncHandler(async (req, res) => {
 
     } else {
       const recommend = await axios.get(`http://127.0.0.1:5500/?q=${req.user._id}`);
-      
-      
+
+
       response = await Product.find({
         _id: { $in: recommend?.data?.response },
       }).populate({ path: 'category', populate: { path: 'branch', model: 'Brand' } })
 
       console.log(response)
     }
-    
+
     if (response.length !== 0) {
       res.json({ success: true, products: response });
     } else {
@@ -247,5 +274,6 @@ module.exports = {
   uploadImageProduct,
   uploadThumbnailProduct,
   addSize,
-  recommendProduct
+  recommendProduct,
+  statistical
 };

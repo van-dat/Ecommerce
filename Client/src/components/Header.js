@@ -30,9 +30,11 @@ const Header = () => {
     <div className="border-b flex flex-col text-white bg-black">
       <div className="border-b">
         <div className="md:container md:mx-auto h-[40px] flex justify-between items-center px-4">
-          <span className="">Hotline:</span>
+          <span className="">Hotline: 099999999</span>
+          <div></div>
+          <div className="md:max-w-[400px] md:w-full"><Search /></div>
           <div className="flex items-center gap-8">
-            <Search />
+            
             <Login />
           </div>
         </div>
@@ -44,7 +46,7 @@ const Header = () => {
           </div>
           {/* <div className="w-auto flex items-center gap-4 "> */}
           {dataCategory?.map((i) => (
-            <NavLink key={i._id} to={i.slug} className={({ isActive }) => (isActive ? isActiveType : noActiveType)}>
+            <NavLink key={i._id} to={`/${i.slug}`} className={({ isActive }) => (isActive ? isActiveType : noActiveType)}>
               <span className="uppercase p-0 m-0">{i.title}</span>
             </NavLink>
           ))}

@@ -23,7 +23,7 @@ const ManageOrder = () => {
 
 
     const response = await apis.apiGetOders(params)
-
+    
     if (response.success) {
       setDataOrder(response.Order)
       setTotalOrder(response.counts)
@@ -59,7 +59,6 @@ const ManageOrder = () => {
   const handlePrint = (item) => {
 
 
-    console.log(item)
     const printWindow = window.open('', '_blank');
   
     printWindow.document.write('<html><head><title>Hóa đơn thanh toán</title></head><body>');
@@ -77,10 +76,7 @@ const ManageOrder = () => {
     printWindow.document.close();
     printWindow.print();
   }
-  
 
-
-  console.log(selectOption)
 
   return (
     <div className='flex flex-col '>
@@ -113,12 +109,12 @@ const ManageOrder = () => {
                   {item.total}
                 </td>
                 <td className='text-center  h-10 min-h-10'>{item.paymentIntent}</td>
-                <td className='text-center  h-10 min-h-10'>{
-                  item.products?.map(item => item.quantity)?.reduce(
+                <td className='text-center  h-10 min-h-10'>{fnPrice(item.products?.map(item => item.quantity)?.reduce(
                     (accumulator, currentValue) => accumulator + currentValue,
-                    0)}</td>
-                <td className='text-center  h-10 min-h-10'>{
-                  updateStatus?._id == item._id ? <Select options={optionsStatus} values={selectOption} labelField="label" valueField="value" onChange={(values) => setValues(values)} /> : <span className={`py-1 px-2 rounded-md ${item.status === 'Pending' ? 'bg-blue-500' : item.status === 'Processing' ? 'bg-green-500' : item.status === 'Success' ? 'bg-green-500' : 'bg-red-500'}`}>
+                    0))}
+                    </td>
+                <td className='text-center  h-10 min-h-10 '>{
+                  updateStatus?._id == item._id ? <Select options={optionsStatus} values={selectOption} labelField="label" valueField="value" onChange={(values) => setValues(values)} /> : <span className={`py-1 px-2 rounded-md text-white font-semibold text-sm  ${item.status === 'Pending' ? 'bg-blue-500' : item.status === 'Processing' ? 'bg-yellow-400' : item.status === 'Success' ? 'bg-green-500' : 'bg-red-500'}`}>
                     {item.status}
                   </span>
                 }</td>
@@ -133,9 +129,11 @@ const ManageOrder = () => {
                       <div onClick={() => { handleUpdateProduct(item) }} className='flex justify-center items-center hover:text-white cursor-pointer hover:bg-red-400 p-[6px] rounded-full'>
                         <HiOutlinePencilSquare />
                       </div>}
-                      <div onClick={() => { handlePrint(item) }} className='flex justify-center items-center hover:text-white cursor-pointer hover:bg-red-400 p-[6px] rounded-full'>
+                     
+                        <div onClick={() => { handlePrint(item) }} className='flex justify-center items-center hover:text-white cursor-pointer hover:bg-red-400 p-[6px] rounded-full'>
                         <BsPrinter />
                       </div>
+                     
                   </div>
 
                 </td>

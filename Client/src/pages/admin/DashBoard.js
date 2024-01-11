@@ -1,9 +1,14 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import { Card } from './components'
+
 
 const DashBoard = () => {
+
+
+  
   return (
     <div>
-      Dashboard
+      <Card/>
     </div>
   )
 }

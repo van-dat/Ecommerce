@@ -11,7 +11,6 @@ const modal = "drop-shadow-none w-full max-w-4xl";
 const Model = () => {
   const { isHidden, size } = useSelector((state) => state.app);
   const {oneProduct} = useSelector(state=>state.product)
-  console.log(oneProduct)
   const Dispatch = useDispatch();
   const settings = {
     dots: true,

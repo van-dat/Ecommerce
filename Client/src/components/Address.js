@@ -13,9 +13,9 @@ const AddressSelector = () => {
   const [selectedAddress, setSelectedAddress] = useState('');
 
   const initialAddresses = [
-    '123 Main St, Cityville',
-    '456 Oak St, Townsville',
-    '789 Pine St, Villagetown'
+    '470 Đ. Trần Đại Nghĩa, Khu đô thị, Ngũ Hành Sơn, Đà Nẵng , Việt Nam',
+    '54-86 Lê Trung Đình,Hoà Hải, Ngũ Hành Sơn, Đà Nẵng , Việt Nam',
+    '71 Ngũ Hành Sơn, Bắc Mỹ An, Ngũ Hành Sơn, Đà Nẵng , Việt Nam'
   ];
 
   useEffect(() => {

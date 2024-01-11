@@ -10,6 +10,8 @@ import exchange from "../assets/img/img_policy_product_2.webp";
 import Shipment from "../assets/img/img_policy_product_3.webp";
 import { toast } from "react-toastify";
 import { getCurrentUser } from '../store/action'
+import { cartCurrent } from "../store/Slice/cartSlice";
+import Path from "../ultils/path";
 
 
 
@@ -18,7 +20,6 @@ const SelectDetail = ({ isShow }) => {
     const navigate = useNavigate();
     const { size } = useSelector((state) => state.app);
     const { oneProduct } = useSelector((state) => state.product);
-    console.log(oneProduct)
     const { user } = useSelector((state) => state.auth);
     const Dispatch = useDispatch();
     const [Select, setSelect] = useState(36);
@@ -56,7 +57,10 @@ const SelectDetail = ({ isShow }) => {
     const handlePaymentNow = () => {
         const data = []
 
-        data.push({ products: oneProduct, quantity: 1, })
+        data.push({ product: oneProduct ,quantity: 1, size: Select })
+        Dispatch(cartCurrent(data))
+        navigate(`/${Path.CHECKOUT}`)
+        Dispatch(noShow())
     }
 
 

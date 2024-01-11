@@ -33,7 +33,6 @@ const Login = () => {
 
 
   const { user } = useSelector(state => state.auth)
-  console.log(user)
   const handleLogout = async () => {
     const response = await apis.apiLogOut();
     if (response.success) {
@@ -93,10 +92,10 @@ const Login = () => {
               <h3 className="capitalize">{`${user?.firstname} ${user?.lastname}`}  </h3>
             </div>
             <div className="flex  flex-col ">
-              <div className="flex justify-between items-center  p-3 hover:bg-content cursor-pointer">
+              <div onClick={()=>navigate(Path.MEMBER)} className="flex justify-between items-center  p-3 hover:bg-content cursor-pointer">
                 <div className="flex items-center gap-3">
                   <LuUser />
-                  <p>Edit Profile</p>
+                  <p>Profile</p>
                 </div>
                 <MdKeyboardArrowRight size={21} />
               </div>

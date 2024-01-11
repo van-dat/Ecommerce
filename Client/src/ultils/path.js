@@ -26,7 +26,12 @@ const Path = {
     MEMBER:'member',
     PERSONAL:'personal',
     CREATE_PRODUCT:'create-product',
-    CHECKOUT:'checkout'
+    CHECKOUT:'checkout',
+    DEFAULT:'',
+    CALENDAR:'calendar',
+    PROFILE:'profile',
+    ACCOUNT:'account',
+    PURCHASE:'purchase'
 
 
 

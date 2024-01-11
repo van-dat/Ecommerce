@@ -78,6 +78,16 @@ export const apiUpdateOder = (data, oid) => axios({
     method: 'put',
     data
 })
+export const apiGetStatistical = () => axios({
+    url: '/product/statistical',
+    method: 'get',
+    
+})
+export const apiGetOrderUser = () => axios({
+    url: '/order/order-user',
+    method: 'get',
+    
+})
 
 
 

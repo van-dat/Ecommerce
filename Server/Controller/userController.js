@@ -1,9 +1,16 @@
 const User = require("../Model/user");
+const Product = require("../Model/product");
+
 const asyncHandler = require("express-async-handler");
 const sendEmail = require("../ultils/sendEmail");
 const crypto = require("crypto");
 const { generateAccessToken, generateRefreshToken } = require("../middlewares/jwt");
 const { verify } = require("jsonwebtoken");
+
+
+
+
+
 
 const register = asyncHandler(async (req, res) => {
   const { email, password, lastname, firstname, mobile } = req.body;
@@ -259,14 +266,14 @@ const resetPassword = asyncHandler(async (req, res) => {
   // const {token} = req.params
   const { password, token } = req.body;
 
-  console.log('2',token, password)
+  console.log('2', token, password)
   if (!password && !token) throw new Error("missing password");
   const passwordResetToken = crypto.createHash("sha256").update(token).digest("hex");
   const userData = await User.findOne({
     passwordResetToken,
     passwordResetExpires: { $gt: Date.now() },
   });
-  console.log('1',userData)
+  console.log('1', userData)
   if (!userData) throw new Error("user Token undefined");
   userData.password = password;
   userData.passwordResetToken = undefined;
@@ -320,15 +327,24 @@ const updateCartProduct = asyncHandler(async (req, res) => {
 });
 
 
+
+
+
+
+
 const updateQuantityCart = asyncHandler(async (req, res) => {
-  const { id, action } = req.body;
+  const { id, action, pid } = req.body;
+  console.log(pid)
   const { _id } = req.user;
+  const product = await Product.findById(pid)
+  console.log(product)
 
   try {
     const user = await User.findById(_id);
 
     // Find the item in the cart
     const updateQuantityItem = user.cart.find((item) => item._id.toString() === id.toString());
+    
 
     if (!updateQuantityItem) {
       return res.status(404).json({
@@ -338,14 +354,22 @@ const updateQuantityCart = asyncHandler(async (req, res) => {
     }
 
     if (action == 0) {
-      updateQuantityItem.quantity += 1;
+      if(product?.quantity > updateQuantityItem.quantity ){
+        updateQuantityItem.quantity += 1;
 
-      await user.save();
-
-      return res.json({
-        result: 'ok',
-        data: 1,
-      });
+        await user.save();
+  
+        return res.json({
+          result: 'ok',
+          data: 1,
+        });
+      }else {
+        return res.json({
+          result:'error',
+          msg:'Không thể thêm vì sản phẩm không đủ trong kho'
+        })
+      }
+     
     } else {
       if (updateQuantityItem.quantity <= 1) {
         updateQuantityItem.quantity = 1

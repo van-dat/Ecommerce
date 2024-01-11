@@ -7,7 +7,7 @@ const {blog} = useSelector(state => state.app)
 
  
   return (
-    <div className="flex container md:mx-auto text-main ">
+    <div className="flex md:container md:mx-auto text-main ">
       <div className="w-2/3 pr-2 flex flex-col gap-4 group  ">
         <BoxNew data={blog[0]} />
       </div>

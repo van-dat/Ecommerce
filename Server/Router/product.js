@@ -14,7 +14,9 @@ router.put('/update-thumbnail/:pid', [verifyAccessToken, isAdmin], Uploader.arra
 router.delete('/:pid', [verifyAccessToken, isAdmin], Controller.deleteProduct)
 router.put('/:pid', [verifyAccessToken, isAdmin], Uploader.fields([{ name: 'image', maxCount: 10 }, { name: 'thumbnail', maxCount: 1 }]), Controller.updateProduct)
 router.put('/add-size/:pid', [verifyAccessToken, isAdmin], Controller.addSize)
+router.get('/statistical',[verifyAccessToken, isAdmin], Controller.statistical)
 router.get('/:pid', Controller.getProduct)
+
 
 
 router.post('/recommend/:q', [verifyAccessToken], Controller.recommendProduct)

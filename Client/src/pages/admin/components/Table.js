@@ -95,7 +95,7 @@ const Table = () => {
                 {editTable && <button type="submit" className='btn bg-green-600 text-white p-2 rounded-md'>Update</button>}
               </div>
               <div className='w-[400px] p-2'>
-                <Search data={data} />
+                <Search placeholder='Tìm kiếm User email' data={data} />
               </div>
             </div>
             <table className="table-auto w-full ">

@@ -36,6 +36,10 @@ import { CiLocationOn } from "react-icons/ci";
 import { RiTelegramLine } from "react-icons/ri";
 import { CiMail } from "react-icons/ci";
 import { BsPrinter } from "react-icons/bs";
+import { BsCart2 } from "react-icons/bs";
+import { BiMessageRounded } from "react-icons/bi";
+import { TfiUser } from "react-icons/tfi";
+import { HiOutlineGift } from "react-icons/hi";
 
 
  const icons = {
@@ -80,7 +84,11 @@ import { BsPrinter } from "react-icons/bs";
     CiLocationOn,
     RiTelegramLine,
     CiMail,
-    BsPrinter
+    BsPrinter,
+    BsCart2,
+    BiMessageRounded ,
+    TfiUser,
+    HiOutlineGift
     
 
 

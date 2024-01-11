@@ -17,7 +17,7 @@ const Banner = () => {
     arrows: true,
   };
   return (
-    <div className=" w-full overflow-hidden laptop:h-[500px] mt-[185px]">
+    <div className=" w-full overflow-hidden laptop:h-[500px] mt-[165px]">
       <Slider {...settings}>
         {dataBanner?.banner?.map((i, index) => (
           <div key={index} className="overflow-hidden" >

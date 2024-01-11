@@ -4,16 +4,14 @@ import numpy as np
 import pymongo
 import csv
 import xxhash
-
+from Collaborative import *
 from CB import *
-from CBHigher import *
 
 start_time = time.time()
 app = Flask(__name__)
 
 myclient = pymongo.MongoClient("mongodb+srv://dangvandat1e:OmdjJs1Hl7GQQXGC@shoes.ztjdcb6.mongodb.net/")
 mydb = myclient["test"]
-print(mydb.list_collection_names())
 mycol = mydb["products"]
 myCustomers = mydb["users"]
 # myRatings = mydb["ratings"]
@@ -21,7 +19,6 @@ myCategories = mydb["materials"]
 reverse_mapping = {}
 userList = []
 itemList = []
-print(myclient.server_info())
 
 ##### START Pre-processing data
 
@@ -45,7 +42,6 @@ csvHeaderRating = ["product_id", "title"]
 itemCategoryList = {}
 categoryCount = 0
 for product in myCategories.find():
-    print(product)
     itemCategoryList[product["title"]] = categoryCount
     categoryCount += 1
 with open('./products.csv', 'w', encoding='UTF8') as f:
@@ -53,7 +49,6 @@ with open('./products.csv', 'w', encoding='UTF8') as f:
     with open("./ratings.csv", 'w', encoding='UTF8') as ratingFile:
         ratingFile.truncate()
         for x in mycol.find():
-            print(x["_id"])
             productId = str(hash_string(str(x["_id"])))
             categoryList = [0] * categoryCount
             for category in x["material"]:
@@ -116,11 +111,14 @@ i_cols = csvHeaderRating + list(itemCategoryList.keys())
 items = pd.read_csv('./products.csv', sep='|', names=i_cols, encoding='latin-1', index_col="product_id")
 n_items = items.shape[0]
 
+collaborativeModel = Collaborative(users=users, products=items, ratings=ratings_base)
+collaborativeModel.fit()
+
 X0 = items.values
 X_train_counts = X0[:, -categoryCount:]
 
-cb = Contentbased(rate_train, X_train_counts, n_users= n_users, n_items = n_items, items = items, users = users, lamda=7)
-cb.fit(userList)
+# cb = Contentbased(rate_train, X_train_counts, n_users= n_users, n_items = n_items, items = items, users = users, lamda=7)
+# cb.fit(userList)
 
 cbEntity = CB("./nonproducts.csv")
 cbEntity.fit()
@@ -131,11 +129,14 @@ print('--- %s seconds ---' % (time.time() - start_time))
 def index():
     userId = request.args.get('q')
     userIdHashed = hash_string(userId)
-    predict = cb.recommend(int(userIdHashed), 4)
+    # predict = cb.recommend(int(userIdHashed), 4)
+    predict = collaborativeModel.predict(int(userIdHashed), 4)
     print(predict)
     recommendList = []
-    for index in predict:
-        recommendList.append(get_hash_original(int(itemList[index])))
+    print('itemList:', itemList)
+    for productIdHash in predict:
+        print('productId:', productIdHash)
+        recommendList.append(get_hash_original(int(productIdHash)))
     response = np.array(recommendList).tolist()
     return json.dumps({"response": response})
 
@@ -152,7 +153,6 @@ def nonrating():
         print(productId)
     response = np.array(recommendList).tolist()
     return json.dumps({"response": response})
-
 
 
 app.run(port=5500)

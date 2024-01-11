@@ -87,13 +87,23 @@ module.exports = {
           }
         },
         "scale-up-center": {
-          "0%":{
+          "0%": {
             "-webkit-transform": "scale(0.5);",
-                    transform: "scale(0.5);"
+            transform: "scale(0.5);"
           },
-         " 100%" :{
+          " 100%": {
             "-webkit-transform": "scale(1);",
-                    transform: "scale(1);"
+            transform: "scale(1);"
+          }
+        },
+        "slide-bottom": {
+          "0%" :{
+            "-webkit-transform": "translateY(-100px);",
+                    transform: "translateY(-100px);"
+          },
+          "100%" :{
+            "-webkit-transform": "translateY(0);",
+                    transform: "translateY(0);"
           }
         }
 
@@ -106,7 +116,8 @@ module.exports = {
         "slide-top": "slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;",
         "zoom-img": "zoom-img 0.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) NaNs infinite both",
         "user": "user 1s cubic-bezier(.25,.46,.45,.94) both;animation:scale-in-center .5s cubic-bezier(.25,.46,.45,.94) both",
-        "zoom":"scale-up-center 0.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;"
+        "zoom": "scale-up-center 0.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;",
+        "slide-bottom":"slide-bottom 0.5s ease-in-out both ;"
       },
       flex: {
         6: "6 6 0%",
