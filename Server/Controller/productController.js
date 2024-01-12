@@ -110,7 +110,6 @@ const rating = asyncHandler(async (req, res) => {
   const sumStar = data?.rating.reduce((sum, i) => sum + +i.star, 0);
   data.totalRating = Math.round((sumStar * 10) / countRating) / 10;
 
-  console.log(Math.round((sumStar * 10) / countRating) / 10)
   // console.log(Math.round((sumStar * 10) / countRating) / 10);
   await data.save();
   return res.status(200).json({
@@ -248,7 +247,6 @@ const recommendProduct = asyncHandler(async (req, res) => {
         _id: { $in: recommend?.data?.response },
       }).populate({ path: 'category', populate: { path: 'branch', model: 'Brand' } })
 
-      console.log(response)
     }
 
     if (response.length !== 0) {

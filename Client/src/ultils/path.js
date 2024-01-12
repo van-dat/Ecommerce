@@ -19,7 +19,7 @@ const Path = {
     CONFIRM: 'confirm',
     CART:'cart',
     ADMIN:'admin',
-    DASH_BOARD:'admin/dashboard',
+    DASH_BOARD:'dashboard',
     MANAGE_ORDER:'manage-order',
     MANAGE_PRODUCT:'manage-product',
     MANAGE_USER:'manage-user',
@@ -31,7 +31,8 @@ const Path = {
     CALENDAR:'calendar',
     PROFILE:'profile',
     ACCOUNT:'account',
-    PURCHASE:'purchase'
+    PURCHASE:'purchase',
+   
 
 
 

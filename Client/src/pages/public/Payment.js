@@ -58,8 +58,7 @@ const ButtonWrapper = ({ showSpinner, currency, amount, payload , reduxDispatch}
                     
                 }}
                 onApprove={(data, action) => action.order.capture().then(async (response) => {
-                    console.log(response)
-                    console.log(payload)
+                
                     if (response.status === 'COMPLETED') {
                         handleOrder()
                     }

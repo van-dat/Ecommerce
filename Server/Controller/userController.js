@@ -265,15 +265,12 @@ const forgotPassword = asyncHandler(async (req, res) => {
 const resetPassword = asyncHandler(async (req, res) => {
   // const {token} = req.params
   const { password, token } = req.body;
-
-  console.log('2', token, password)
   if (!password && !token) throw new Error("missing password");
   const passwordResetToken = crypto.createHash("sha256").update(token).digest("hex");
   const userData = await User.findOne({
     passwordResetToken,
     passwordResetExpires: { $gt: Date.now() },
   });
-  console.log('1', userData)
   if (!userData) throw new Error("user Token undefined");
   userData.password = password;
   userData.passwordResetToken = undefined;
@@ -330,22 +327,18 @@ const updateCartProduct = asyncHandler(async (req, res) => {
 
 
 
-
+// update quantity in Cart
 
 const updateQuantityCart = asyncHandler(async (req, res) => {
   const { id, action, pid } = req.body;
-  console.log(pid)
   const { _id } = req.user;
   const product = await Product.findById(pid)
-  console.log(product)
 
   try {
     const user = await User.findById(_id);
 
     // Find the item in the cart
     const updateQuantityItem = user.cart.find((item) => item._id.toString() === id.toString());
-    
-
     if (!updateQuantityItem) {
       return res.status(404).json({
         result: 'error',

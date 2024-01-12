@@ -49,11 +49,14 @@ function App() {
             <Route path={Path.MANAGE_ORDER} element={<ManageOrder />} />
             <Route path={Path.CREATE_PRODUCT} element={<CreateProduct />} />
             <Route path={Path.CALENDAR} element={<CalendarFull />} />
+            <Route path={Path.PROFILE} element={<Account />} />
+
 
 
           </Route>
           {/* member */}
           <Route path={Path.MEMBER} element={<MemberLayout />} >
+            <Route path={Path.DEFAULT} element={<Purchase />} />
             <Route path={Path.PERSONAL} element={<Personal />} />
             <Route path={Path.ACCOUNT} element={<Account />} />
             <Route path={Path.PURCHASE} element={<Purchase />} />

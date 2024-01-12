@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { random } from "../../ultils/fn";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -13,6 +13,9 @@ const Details = () => {
   const { title } = useParams();
   const [Category, setCategory] = useState();
   const [page, setPage] = useState();
+  const scroll = useRef()
+
+
   const handleChangeOption = (e) => {
     let selectElement = document.getElementById("option").value;
     Dispatch(getProduct({ sort: selectElement, title: title, page: page }));
@@ -22,10 +25,15 @@ const Details = () => {
     Dispatch(getProduct({ title: title, page: page }));
   }, [page]);
 
+  
+  useEffect(() => {
+    scroll.current.scrollIntoView({ behavior: "smooth", block: "start", inline: "start" });
+  }, [title]);
+
 
   return (
-    <div className="flex flex-col bg-white mt-[165px] py-10 ">
-      <div className="md:container mx-auto flex mt-2">
+    <div ref={scroll} className="flex flex-col bg-white mt-[165px] py-10 ">
+      <div   className="md:container mx-auto flex mt-2">
         <BreadCrumb />
       </div>
       <div className="md:container md:mx-auto flex mt-2 gap-6">
@@ -33,7 +41,7 @@ const Details = () => {
           <div className="col-span-1 ">
             <NavBarLeft />
           </div>
-          <div className="col-span-3 ">
+          <div  className="col-span-3 ">
             <div className="flex flex-col col-span-2 ">
               {/* <h3 className="font-bold text-2xl px-2">{Category?.filter(e => e.slug === title).title}</h3> */}
               <div className="flex justify-end p-4 items-center gap-3 text-md font-normal">

@@ -22,7 +22,11 @@ const FeaturedProduct = ({ text, detail }) => {
     },
     {
       id: 4,
-      name: "Túi xách",
+      name: "VANS",
+    },
+    {
+      id: 5,
+      name: "CONVERSE",
     },
   ];
   const fetchDataProduct = async () => {
@@ -62,14 +66,14 @@ const FeaturedProduct = ({ text, detail }) => {
       </div>}
 
       {!detail && <Product   data={dataProduct} />}
-      {!detail && ( 
+      {/* {!detail && ( 
         <div className="flex justify-center items-center">
           <Button
             text="Xem thêm các sản phẩm khác"
             css=" border-[1px] border-btn-100 bg-white py-2 px-4 font-semibold rounded-full hover:bg-btn hover:text-white  hover:border-btn"
           />
         </div>
-      )}
+      )} */}
       {detail && <News/>}
     </div>
   );

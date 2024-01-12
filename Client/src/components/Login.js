@@ -39,7 +39,7 @@ const Login = () => {
       dispatch(logOut())
       setShowUser(false)
       navigate(Path.PUBLIC)
-     
+
     }
   }
 
@@ -92,7 +92,7 @@ const Login = () => {
               <h3 className="capitalize">{`${user?.firstname} ${user?.lastname}`}  </h3>
             </div>
             <div className="flex  flex-col ">
-              <div onClick={()=>navigate(Path.MEMBER)} className="flex justify-between items-center  p-3 hover:bg-content cursor-pointer">
+              <div onClick={() => navigate(Path.MEMBER)} className="flex justify-between items-center  p-3 hover:bg-content cursor-pointer">
                 <div className="flex items-center gap-3">
                   <LuUser />
                   <p>Profile</p>
@@ -218,6 +218,15 @@ const Login = () => {
 
       {
         user?.role == 'admin' &&
+        <div onClick={() => { navigate(Path.ADMIN) }} className="cursor-pointer  px-3 flex items-center justify-center gap-2 text-white group select-none">
+          <span className="" >
+            <RiAdminLine color="white" size={23} />
+          </span>
+          <h6 className="m-0">Profile</h6>
+        </div>
+      }
+      {
+        user?.role == 'employee' &&
         <div onClick={() => { navigate(Path.ADMIN) }} className="cursor-pointer  px-3 flex items-center justify-center gap-2 text-white group select-none">
           <span className="" >
             <RiAdminLine color="white" size={23} />

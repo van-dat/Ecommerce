@@ -21,11 +21,8 @@ const ManageProduct = () => {
   const [update, setUpdate] = useState(false);
   const [page, setPage] = useState(1);
 
-
-
-
-
   const fetchData = async (params) => {
+    
     const response = await apis.apiProducts(params)
     if (response.success) {
       setCounts(response.counts)
@@ -45,14 +42,14 @@ const ManageProduct = () => {
   })
   useEffect(() => {
     fetchData({ page })
-  }, [page, update ]);
+  }, [page, update]);
 
   const handleDeleteProduct = (id, title) => {
     console.log(id, title)
-    Swal.fire({ text: 'Xác nhận xóa sản phẩm'+" "+ title , icon:'warning'}).then(async()=>{
+    Swal.fire({ text: 'Xác nhận xóa sản phẩm' + " " + title, icon: 'warning' }).then(async () => {
       const response = await apis.apiDeleteProduct(id)
       console.log(response)
-      if(response.success) {
+      if (response.success) {
         toast.success(response.msg)
         fetchData({ page })
       }
@@ -62,7 +59,8 @@ const ManageProduct = () => {
 
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col  w-full'>
+      
       <div className='p-4 mb-4 flex justify-between items-center  text-2xl font-semibold bg-white rounded-md'>
         <h6 className=' m-0 text-2xl text-[#333] uppercase'>{update ? 'Update Product' : 'Manage Product'}</h6>
       </div>

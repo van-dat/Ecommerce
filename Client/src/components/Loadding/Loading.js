@@ -1,18 +1,18 @@
 import React from 'react'
-
+import { RotatingLines } from 'react-loader-spinner'
 const Loading = () => {
     return (
-        render(<RotatingLines
+        <RotatingLines
             visible={true}
-            height="96"
-            width="96"
-            color="grey"
+            height="40"
+            width="40"
+            color="white"
             strokeWidth="5"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"
             wrapperStyle={{}}
             wrapperClass=""
-        />)
+        />
 
     )
 }

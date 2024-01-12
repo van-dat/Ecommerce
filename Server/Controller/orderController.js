@@ -95,7 +95,6 @@ const updateOrder = asyncHandler(async (req, res) => {
   const { oid } = req.params;
   const { status } = req.body;
   if (!status) throw new Error("missing input");
-  console.log(status)
   const rs = await Order.findByIdAndUpdate(oid, { status }, { new: true });
   return res.status(200).json({
     status: rs ? true : false,

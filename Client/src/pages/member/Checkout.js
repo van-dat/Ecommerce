@@ -131,11 +131,15 @@ const Checkout = () => {
                                         className
                                     />
                                 </div>
-                                {paymentIntent[0]?.title == 'Thanh toán bằng Paypal' &&
-                                    <Payment payload={{ products: cart, total: totalPrice, paymentIntent: paymentIntent[0]?.title, address, note: methodPayment[0]?.note || '', status: 'Success' }} amount={Math.round(totalPrice / 23500)} />
+
+                                
+                                {paymentIntent[0]?.title === 'Thanh toán bằng Paypal' &&
+                                   <div className='mt-10 w-full z-10'>
+                                     <Payment payload={{ products: cart, total: totalPrice, paymentIntent: paymentIntent[0]?.title, address, note: methodPayment[0]?.note || '', status: 'Success' }} amount={Math.round(totalPrice / 23500)} />
+                                   </div>
                                 }
 
-                                {paymentIntent[0]?.title == 'Thanh toán khi nhận hàng' &&
+                                {paymentIntent[0]?.title === 'Thanh toán khi nhận hàng' &&
                                     <div className='w-full'>
                                         <button onClick={() => handleOrder()} type='button' className='w-full rounded-md text-white font-semibold btn px-4 py-1 bg-red-500'>Đặt hàng </button>
                                     </div>

@@ -7,6 +7,8 @@ import { Show } from "../store/Slice/appSlice";
 import { getOneProduct, getRecommend, getSize } from "../store/action";
 import { review } from '../store/Slice/productSlice'
 import { showRating } from "../ultils/_helper";
+import Loading from "./Loadding/Loading";
+
 
 const { HiOutlineEye } = icons;
 
@@ -42,10 +44,14 @@ const Product = ({ data, css, styleImage }) => {
               key={index}
               className={
                 css
-                  ? "w-full flex relative flex-wrap group shadow-md hover:shadow-md"
-                  : " w-full flex shadow-md relative  flex-wrap group"
+                  ? "w-full flex relative flex-wrap group shadow-md hover:shadow-md "
+                  : " w-full flex shadow-md relative  flex-wrap group "
               }
             >
+              {!data &&
+                <div className="absolute inset-0 bg-header w-full flex items-center justify-center " >
+                  <Loading />
+                </div>}
               <div className="  w-full ">
                 <div className="w-full overflow-hidden">
                   <img

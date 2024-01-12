@@ -1,18 +1,19 @@
 import Slider from "react-slick";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo, useRef } from "react";
 import { BreadCrumb, Product, Rating, SelectDetail } from "../../components";
 import imageLogo from '../../assets/img/icon_logo.svg'
 import icons from "../../ultils/icon";
 import { getOneProduct, optionRating } from "../../store/action";
 import * as apis from '../../apis'
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 
 
 const { IoIosCloseCircleOutline, AiFillStar } = icons
 const DetailsProduct = () => {
-
+  const scroll = useRef()
   const dispatch = useDispatch()
   const { oneProduct, recommend } = useSelector((state) => state.product);
   const [Hidden, setHidden] = useState(0);
@@ -20,7 +21,9 @@ const DetailsProduct = () => {
   const [comment, setComment] = useState('');
   const [checkStar, setCheckStar] = useState(null);
 
-  console.log(recommend)
+  const {slug} = useParams()
+  console.log(slug)
+
   const settings = {
     dots: true,
     infinite: true,
@@ -55,15 +58,18 @@ const DetailsProduct = () => {
     }
   }
 
+  useEffect(() => {
+    scroll.current.scrollIntoView({ behavior: "smooth", block: "start", inline: "start" });
+  }, [slug]);
 
   return (
     <>
       {oneProduct && (
-        <div className="bg-content">
+        <div   className="bg-content">
           <div className="md:container md:mx-auto mt-[165px] pb-[50px]  ">
             <BreadCrumb />
             <div className="grid grid-cols-6 gap-4 ">
-              <div className=" col-span-2 items-center bg-white shadow-md  max-h-[570px] p-4 ">
+              <div ref={scroll} className=" col-span-2 items-center bg-white shadow-md  max-h-[570px] p-4 ">
                 <Slider {...settings}>
                   {oneProduct?.thumbnail?.map((i, index) => (
                     <div key={index} className="flex items-center focus:outline-none">

@@ -10,7 +10,7 @@ const AdminLayout = () => {
  
 
   const { isLogin, user } = useSelector(state => state.auth)
-  if (!isLogin || !user || user?.role !== 'admin') return <Navigate to={`/${Path.LOGIN}`} replace={true} />
+  if (!isLogin || !user || user?.role !== 'admin' && user?.role !== 'employee') return <Navigate to={`/${Path.LOGIN}`} replace={true} />
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
 

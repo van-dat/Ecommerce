@@ -113,7 +113,6 @@ const Cart = () => {
         setPaymentIntent([])
     }
 
-    console.log(user)
 
     return (
         <div className='mt-[165px] md:container md:mx-auto '>

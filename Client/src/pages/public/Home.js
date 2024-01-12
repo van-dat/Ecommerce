@@ -27,7 +27,7 @@ const Home = () => {
         dispatch(getCurrentUser());
         
       }
-    }, 100);
+    }, 300);
     return () => { clearTimeout(settimeout) }
   }, [dispatch, isLogin]);
 

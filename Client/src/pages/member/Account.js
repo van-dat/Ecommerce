@@ -35,6 +35,13 @@ const Account = () => {
               <span className='min-w-[120px] text-[#333] text-end text-md font-medium '>SDT:</span>
               <span className='text-md font-medium '>{user?.mobile} </span>
             </div>
+            {!(user?.role == 'user') &&
+              <div className='flex  gap-2 py-2'>
+                <span className='min-w-[120px] text-[#333] text-end text-md font-medium '>Thành viên:</span>
+                <span className='text-md capitalize font-medium '>{user?.role} </span>
+              </div>
+            }
+
           </div>
 
         </div>

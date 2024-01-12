@@ -17,7 +17,8 @@ export const appSlice = createSlice({
     dataAdidas: [],
     isLoading: false,
     search: null,
-    showModel: false
+    showModel: false,
+    loading: false
   },
   reducers: {
     // Logout không gọi API mà chỉ đơn giản là cập nhật state
@@ -41,6 +42,9 @@ export const appSlice = createSlice({
     },
     showModelSearch: (state, action) => {
       state.showModel = action.payload
+    },
+    ActionLoading:(state, action) => {
+      state.loading = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -142,6 +146,6 @@ export const appSlice = createSlice({
 
   },
 });
-export const { noShow, Show, dataNike, dataAdidas, dataMlb, search,showModelSearch } = appSlice.actions
+export const { noShow, Show, dataNike, dataAdidas, dataMlb, search, showModelSearch, ActionLoading } = appSlice.actions
 
 export default appSlice.reducer

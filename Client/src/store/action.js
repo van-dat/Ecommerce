@@ -80,6 +80,10 @@ export const valueRole = [{
 {
   value: 'admin',
   code: 'admin'
+}, {
+
+  value: 'employee',
+  code: 'employee'
 }]
 export const valueStatus = [{
   value: 'Active',
@@ -103,41 +107,41 @@ export const optionsPayment = [{
 export const optionRating = [
   {
     code: 1,
-    value : 'Rất tệ'
+    value: 'Rất tệ'
   },
   {
     code: 2,
-    value : 'Tệ'
+    value: 'Tệ'
   },
   {
     code: 3,
-    value : 'Bình thường'
+    value: 'Bình thường'
   },
   {
     code: 4,
-    value : 'Tốt'
+    value: 'Tốt'
   },
   {
     code: 5,
-    value : 'Rất tốt'
+    value: 'Rất tốt'
   },
 ]
 
 export const optionsStatus = [
-  { 
+  {
     value: 'Pending',
     label: "Pending"
   },
   {
-    value:  'Processing',
+    value: 'Processing',
     label: "Processing"
   },
   {
-    value:  'Success',
+    value: 'Success',
     label: "Success"
   },
   {
-    value:  'Canceled',
+    value: 'Canceled',
     label: "Canceled"
   }
 ];

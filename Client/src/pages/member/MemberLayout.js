@@ -19,7 +19,7 @@ const MemberLayout = () => {
         <div className='col-span-3 w-full shadow-md rounded-md  '>
           <div className='p-4 flex items-center border-b gap-4'>
             <img src={profile} alt="image" className='w-[60px] h-[60px] object-contain rounded-full' />
-            <span className='capitalize text-md font-semibold'>{user.firstname} {user.lastname}</span>
+            <span className='capitalize text-md font-semibold'>{user?.firstname} {user?.lastname}</span>
           </div>
           <div className='flex flex-col p-4  gap-2'>
             <NavLink

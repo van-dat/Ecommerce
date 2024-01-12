@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import InputForm from './components/InputForm'
 import Selected from './components/Selected'
 import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import * as apis from '../../apis'
 import EditorFrom from './components/EditorForm'
 import Select from 'react-dropdown-select';
@@ -10,19 +10,23 @@ import notImage from './image/notimage.jpg'
 import { getBase64 } from '../../ultils/_helper'
 import { toast } from 'react-toastify'
 import icons from '../../ultils/icon'
+import Loading from '../../components/Loadding/Loading'
+import { ActionLoading } from '../../store/Slice/appSlice'
 
 
 
 
 const { BsFillTrashFill, LuEye } = icons
 const CreateProduct = () => {
-    const { category } = useSelector(state => state.app)
-    const { register, formState: { errors }, reset, handleSubmit, watch } = useForm()
 
+    const dispatch = useDispatch()
+    const { category, loading } = useSelector(state => state.app)
+    const { register, formState: { errors }, reset, handleSubmit, watch } = useForm()
     const [payload, setPayload] = useState({
         description: ''
     });
     const [options, setOptions] = useState();
+
     const [valueOption, setValueOption] = useState([]);
 
     const [invalidFields, setInvalidFields] = useState([]);
@@ -49,7 +53,9 @@ const CreateProduct = () => {
 
 
     const handleCreate = async (data) => {
+       
         try {
+            dispatch(ActionLoading(true))
             const finalPayload = { ...data, ...payload };
             const formData = new FormData();
             for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1]);
@@ -75,8 +81,9 @@ const CreateProduct = () => {
                 })
                 reset();
                 setValueOption([])
+                
             }
-
+            dispatch(ActionLoading(false))
         } catch (error) {
             console.error('Error:', error);
 
@@ -139,7 +146,11 @@ const CreateProduct = () => {
 
 
     return (
-        <div className='flex flex-col '>
+        <div className='flex flex-col w-full relative'>
+            
+        {loading && <div className="absolute inset-0 bg-black opacity-50 z-10 w-full flex items-center justify-center " >
+          <Loading />
+        </div>}
             <div className='p-4 mb-4 flex justify-between items-center  text-2xl font-semibold bg-white rounded-md'>
                 <h6 className=' m-0 text-2xl text-[#333] uppercase'>Create User</h6>
             </div>

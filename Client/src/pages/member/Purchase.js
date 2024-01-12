@@ -25,6 +25,7 @@ const Purchase = () => {
         const response = await apis.apiUpdateOder({status:'Canceled'}, oid)
         if(response.status){
             toast.success(response.msg)
+            fetchData()
         }else {
             toast.warning(response.msg)
         }
